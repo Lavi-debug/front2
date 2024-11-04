@@ -1,7 +1,7 @@
 import './App.css';
 import './custom.css';
-// import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { HashRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+// import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import Admin from './components/Admin';
 import Test from './components/Test';
 import Driver from './components/Driver';
