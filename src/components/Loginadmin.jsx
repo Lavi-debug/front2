@@ -165,7 +165,7 @@ import React, { useState } from 'react';
 import Admin from './Admin';
 
 const Loginadmin = () => {
-    const host = "https://tracker-backend-qk96.onrender.com";
+    const host = "https://logi-8ty2.onrender.com";
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);

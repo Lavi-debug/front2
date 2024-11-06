@@ -9,7 +9,7 @@ const Parents = ({ license, contact }) => {
       lng: 77.412615,   // Default longitude
     },
   });
-  const host = "https://tracker-backend-qk96.onrender.com";
+  const host = "https://logi-8ty2.onrender.com";
   const mapRef = useRef(null);  // Ref for the map container
   const mapInstance = useRef(null); // Ref for the map instance
   const markerRef = useRef(null); // Ref for the map marker
