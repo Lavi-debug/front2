@@ -12,6 +12,8 @@ import Logindriver from './components/Logindriver';
 import Loginadmin from './components/Loginadmin';
 import Parentscopy from './components/Parentscopy';
 import Loginparents from './components/Loginparents';
+import Students from './components/Students';
+import Loginstudent from './components/Loginstudent';
 
 function App() {
   return (
@@ -20,6 +22,9 @@ function App() {
         <Route path="/" element={<Loginadmin />} />
         <Route path="/Driver" element={<Logindriver />} />
         <Route path="/Parents" element={<Loginparents />} />
+        <Route path="/Students" element={<Loginstudent />} />
+
+        {/* <Route path="/Students" element={<Students />} /> */}
         {/* <Route path="/Parentscopy" element={<Parentscopy />} /> */}
         {/* <Route path="/admin" element={<Admin />} /> */}
         {/* <Route path="/test" element={<Test />} /> */}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react"
 
 const Admin = () => {
-    const host = "https://logi-8ty2.onrender.com";
+    const host = "http://localhost:5000";
     const mapRef = useRef(null);
     const markerRef = useRef(null); // Create a ref for the marker+-
     const mapInstance = useRef(null);
@@ -782,11 +782,7 @@ const Admin = () => {
                                         const coords = car.Coords || { lat: "N/A", lng: "N/A" };
 
                                         return (
-                                            <tr
-                                                key={car.id}
-                                                className="hover:bg-gray-200"
-                                                onClick={() => getCarDetails(car.License)} // Fetch car coordinates on row click
-                                            >
+                                            <tr key={car.id} className="hover:bg-gray-200" onClick={() => getCarDetails(car.License)}>
                                                 <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words"><div className="w-full">{car.driverName}</div></td>
                                                 <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words"><div className="w-full">{car.carName}</div></td>
                                                 <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words"><div className="w-full">{car.License}</div></td>
