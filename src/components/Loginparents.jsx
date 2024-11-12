@@ -250,7 +250,7 @@ const Loginparents = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [showParents, setShowParents] = useState(false);
 
-  const host = "http://localhost:5000";
+  const host = "https://logi-8ty2.onrender.com";
 
   useEffect(() => {
     const fetchAllStudents = async () => {

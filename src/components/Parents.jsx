@@ -418,7 +418,7 @@ const Parents = ({ license, contact }) => {
     },
   });
   const [selectedStudent, setSelectedStudent] = useState(null);
-  const host = "http://localhost:5000";
+  const host = "https://logi-8ty2.onrender.com";
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markerRef = useRef(null);
@@ -537,7 +537,7 @@ const Parents = ({ license, contact }) => {
                 {filteredStudents.map((student, index) => (
                   <div key={student.id} className={`flex ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} border-b`}>
                     <div className="w-1/4 px-2 py-3 md:px-6 md:py-4 flex justify-center items-center text-gray-900 font-medium">
-                      <div className="w-[100px] break-words text-center" onClick={() => get(car.License)}>{student.Child}</div>
+                      <div className="w-[100px] break-words text-center">{student.Child}</div>
                     </div>
                     <div className="w-1/4 px-2 py-3 md:px-6 md:py-4 flex justify-center items-center">
                       <div className="w-[100px] break-words text-center">{student.School}</div>

@@ -305,7 +305,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 
 const Driver = ({ license }) => {
-  const host = "http://localhost:5000";
+  const host = "https://logi-8ty2.onrender.com";
   const [students, setStudents] = useState([]);
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
@@ -622,7 +622,7 @@ const Driver = ({ license }) => {
               <tbody>
                 {students.map((student) => (
                   <tr key={student.id} className="bg-white border-b hover:bg-gray-50">
-                    <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base" onClick={() => fetchStatusHistory(student.id)}>
+                    <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base">
                       {student.Child}
                     </td>
                     <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base">
