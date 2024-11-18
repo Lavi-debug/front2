@@ -165,7 +165,7 @@ import React, { useState } from 'react';
 import Admin from './Admin';
 
 const Loginadmin = () => {
-    const host = "https://logi-8ty2.onrender.com";
+    const host = "https://logi-52ys.onrender.com";
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);

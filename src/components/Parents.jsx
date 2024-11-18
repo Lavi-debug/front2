@@ -417,8 +417,10 @@ const Parents = ({ license, contact }) => {
       lng: 77.412615,
     },
   });
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [modalData, setModalData] = React.useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
-  const host = "https://logi-8ty2.onrender.com";
+  const host = "https://logi-52ys.onrender.com";
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markerRef = useRef(null);
@@ -435,6 +437,64 @@ const Parents = ({ license, contact }) => {
       console.error("Error fetching students:", error);
     }
   };
+
+//   const fetchStatusHistory = async (id) => {
+//     try {
+//         const response = await fetch(`${host}/api/student/getStatusHistory/${id}`, {
+//             method: "GET",
+//         });
+
+//         if (!response.ok) {
+//             throw new Error(`Error: ${response.status} - ${response.statusText}`);
+//         }
+
+//         const data = await response.json();
+//         console.log(`Status history for student ID ${id}:`, data.history);
+//     } catch (error) {
+//         console.error(`Failed to fetch status history for student ID ${id}:`, error.message);
+//     }
+// };
+
+// const handleChildClick = async (id) => {
+//   try {
+//     const response = await fetchStatusHistory(id); // Fetch the history using the function
+//     if (response) {
+//       setModalData(response); // Update modal data state
+//       setModalOpen(true);     // Open the modal
+//     }
+//   } catch (error) {
+//     console.error("Error fetching history:", error.message);
+//   }
+// };
+
+
+const fetchStatusHistory = async (id) => {
+  try {
+    const response = await fetch(`${host}/api/student/getStatusHistory/${id}`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data.history; // Return the fetched history
+  } catch (error) {
+    console.error(`Failed to fetch status history for student ID ${id}:`, error.message);
+    return []; // Return an empty array on failure
+  }
+};
+
+const handleChildClick = async (id) => {
+  try {
+    const history = await fetchStatusHistory(id); // Fetch the history
+    setModalData(history); // Update modal data state
+    setModalOpen(true); // Open the modal
+  } catch (error) {
+    console.error("Error fetching history:", error.message);
+  }
+};
 
   const fetchCarData = async () => {
     try {
@@ -505,6 +565,7 @@ const Parents = ({ license, contact }) => {
   };
 
   const closeModal = () => setSelectedStudent(null);
+  const closehistoryModal = () => setModalOpen(false);
 
   return (
     <>
@@ -534,10 +595,31 @@ const Parents = ({ license, contact }) => {
                   </div>
                 </div>
 
-                {filteredStudents.map((student, index) => (
+                {/* {filteredStudents.map((student, index) => (
                   <div key={student.id} className={`flex ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} border-b`}>
                     <div className="w-1/4 px-2 py-3 md:px-6 md:py-4 flex justify-center items-center text-gray-900 font-medium">
                       <div className="w-[100px] break-words text-center">{student.Child}</div>
+                    </div>
+                    <div className="w-1/4 px-2 py-3 md:px-6 md:py-4 flex justify-center items-center">
+                      <div className="w-[100px] break-words text-center">{student.School}</div>
+                    </div>
+                    <div
+                      className="w-1/4 px-2 py-3 md:px-6 md:py-4 flex justify-center items-center"
+                      onClick={() => openModal(student)}
+                    >
+                      <div className="w-[100px] border border-gray-300 rounded py-1 break-words text-center cursor-pointer">
+                        <h1 className="text-[10px] md:text-xs font-medium">{student.Status}</h1>
+                      </div>
+                    </div>
+                    <div className="w-1/4 px-2 py-3 md:px-6 md:py-4 flex justify-center items-center">
+                      <div className="w-[120px] text-center">{student.Time}</div>
+                    </div>
+                  </div>
+                ))} */}
+                {filteredStudents.map((student, index) => (
+                  <div key={student.id} className={`flex ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} border-b`}>
+                    <div className="w-1/4 px-2 py-3 md:px-6 md:py-4 flex justify-center items-center text-gray-900 font-medium">
+                      <div className="w-[100px] break-words text-center"  onClick={() => handleChildClick(student.id)}>{student.Child}</div>
                     </div>
                     <div className="w-1/4 px-2 py-3 md:px-6 md:py-4 flex justify-center items-center">
                       <div className="w-[100px] break-words text-center">{student.School}</div>
@@ -592,6 +674,61 @@ const Parents = ({ license, contact }) => {
           </div>
         </div>
       )}
+
+    {/* {modalOpen && (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
+          <h2 className="text-lg font-bold mb-4">Status History</h2>
+          <div className="space-y-2">
+            {modalData.map((record, index) => (
+              <div key={index} className="p-2 border rounded-md">
+                <p><strong>Status:</strong> {record.Status}</p>
+                <p><strong>Time:</strong> {record.Time}</p>
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={closehistoryModal}
+            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    )} */}
+
+    {modalOpen && (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full">
+          <h2 className="text-lg font-bold mb-4">Status History</h2>
+          <div className="overflow-auto max-h-96">
+            <table className="w-full border-collapse border border-gray-200">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border border-gray-300 px-4 py-2 text-left">Status</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                {modalData.map((record, index) => (
+                  <tr key={index} className="hover:bg-gray-50">
+                    <td className="border border-gray-300 px-4 py-2">{record.Status}</td>
+                    <td className="border border-gray-300 px-4 py-2">{record.Time}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <button
+            onClick={closehistoryModal}
+            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    )}
+
     </>
   );
 };

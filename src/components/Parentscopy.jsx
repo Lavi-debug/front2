@@ -9,7 +9,7 @@ const Parentscopy = ({ license, contact }) => {
       lng: 77.412615,   // Default longitude
     },
   });
-  const host = "https://logi-8ty2.onrender.com";
+  const host = "http://localhost:5000";
   const mapRef = useRef(null);  // Ref for the map container
   const mapInstance = useRef(null); // Ref for the map instance
   const markerRef = useRef(null); // Ref for the map marker
