@@ -733,7 +733,24 @@ try {
         // Clean up the interval on component unmount
         return () => clearInterval(intervalId);
       }, []); // Empty dependency array ensures this effect runs only once
+
+
+      const [searchQuery, setSearchQuery] = useState("");
+
+      const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value.toLowerCase());
+      };
     
+      const filteredStudents = students.filter((student) =>
+        student.Child.toLowerCase().includes(searchQuery)
+      );
+    
+     
+      
+      const filteredCars = cars.filter((car) =>
+        car.driverName.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      
 
     
 
@@ -923,12 +940,6 @@ try {
                                         const coords = car.Coords || { lat: "N/A", lng: "N/A" };
 
                                         return (
-                                            // <tr key={car.id} className="hover:bg-gray-200" onClick={() => getCarDetails(car.License)}>
-                                            //     <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words"><div className="w-full">{car.driverName}</div></td>
-                                            //     <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words"><div className="w-full">{car.carName}</div></td>
-                                            //     <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words"><div className="w-full">{car.License}</div></td>
-                                            //     <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words"><div className="w-full">{car.Status}</div></td>
-                                            // </tr>
                                             <tr key={car.id} className="hover:bg-gray-200" onClick={() => getCarDetails(car.License)}>
                                                 <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
                                                     <div className="w-full">{car.driverName}</div>
@@ -996,71 +1007,82 @@ try {
                                 </span>
                             )}
                             {isDriverExpanded ? (
-                                <table className="w-full h-full text-sm text-left text-gray-500 border-collapse">
-                                    <thead className="bg-gray-100">
-                                        <tr>
-                                            <th className="px-6 py-3 border-b"><h1>Car Name</h1></th>
-                                            <th className="px-6 py-3 border-b"><h1>License</h1></th>
-                                            <th className="px-6 py-3 border-b"><h1>Seats</h1></th>
-                                            <th className="px-6 py-3 border-b"><h1>Driver</h1></th>
-                                            <th className="px-6 py-3 border-b"><h1>Contact</h1></th>
-                                            <th className="px-6 py-3 border-b"><h1>Password</h1></th>
-                                            <th className="px-6 py-3 border-b"><h1>Edit</h1></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {cars.length === 0 ? (
+
+                                <div>
+                                    <div className="">
+                                        <input
+                                            type="text"
+                                            placeholder="Search by driver name"
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                            className="w-full pl-[15px] py-[10px] border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        />
+                                    </div>
+
+                                    <table className="w-full h-full text-sm text-left text-gray-500 border-collapse">
+                                        <thead className="bg-gray-100">
                                             <tr>
-                                                <td colSpan="7" className="px-5 py-3 text-center font-semibold text-red-500">
-                                                    No cars assigned yet.
-                                                </td>
+                                                <th className="px-6 py-3 border-b"><h1>Car Name</h1></th>
+                                                <th className="px-6 py-3 border-b"><h1>License</h1></th>
+                                                <th className="px-6 py-3 border-b"><h1>Seats</h1></th>
+                                                <th className="px-6 py-3 border-b"><h1>Driver</h1></th>
+                                                <th className="px-6 py-3 border-b"><h1>Contact</h1></th>
+                                                <th className="px-6 py-3 border-b"><h1>Password</h1></th>
+                                                <th className="px-6 py-3 border-b"><h1>Edit</h1></th>
                                             </tr>
-                                        ) : (
-                                            cars.map((car) => (
-                                                <tr key={car.id} className="hover:bg-gray-50">
-                                                    <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
-                                                        <div className="w-[96px]">{car.carName}</div>
-                                                    </td>
-                                                    <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
-                                                        <div className="w-[96px]">{car.License}</div>
-                                                    </td>
-                                                    <td className="px-5 py-3 border-b font-semibold text-[12px] w-[100px] break-words">
-                                                        <div className="w-[96px]">{car.Seats}</div>
-                                                    </td>
-                                                    <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
-                                                        <div className="w-[96px]">{car.driverName}</div>
-                                                    </td>
-                                                    <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
-                                                        <div className="w-[96px]">{car.driverCont}</div>
-                                                    </td>
-                                                    <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
-                                                        <div className="w-[96px]">{car.Password}</div>
-                                                    </td>
-                    
-                                                    <td className="px-5 py-3 border-b font-semibold text-[12px] break-words">
-                                                        <div className="flex">
-                                                            <div className="mr-[10px]" onClick={() => updateCar(car)}>
-                                                                <lord-icon
-                                                                    src="https://cdn.lordicon.com/oqaajvyl.json"
-                                                                    trigger="hover"
-                                                                    style={{ "width": "20px", "height": "20px" }}
-                                                                ></lord-icon>
-                                                            </div>
-                                                            <div className="mr-[10px]" onClick={() => deleteCar(car.id)}>
-                                                                <lord-icon
-                                                                    src="https://cdn.lordicon.com/vlnvqvew.json"
-                                                                    trigger="hover"
-                                                                    style={{ "width": "20px", "height": "20px" }}
-                                                                ></lord-icon>
-                                                            </div>
-                                                        </div>
+                                        </thead>
+                                        <tbody>
+                                            {filteredCars.length === 0 ? (
+                                                <tr>
+                                                    <td colSpan="7" className="px-5 py-3 text-center font-semibold text-red-500">
+                                                        No cars match the search criteria.
                                                     </td>
                                                 </tr>
-                                            ))
-                                        )}
-                                    </tbody>
-
-                                </table>
+                                            ) : (
+                                                filteredCars.map((car) => (
+                                                    <tr key={car.id} className="hover:bg-gray-50">
+                                                        <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
+                                                            <div className="w-[96px]">{car.carName}</div>
+                                                        </td>
+                                                        <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
+                                                            <div className="w-[96px]">{car.License}</div>
+                                                        </td>
+                                                        <td className="px-5 py-3 border-b font-semibold text-[12px] w-[100px] break-words">
+                                                            <div className="w-[96px]">{car.Seats}</div>
+                                                        </td>
+                                                        <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
+                                                            <div className="w-[96px]">{car.driverName}</div>
+                                                        </td>
+                                                        <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
+                                                            <div className="w-[96px]">{car.driverCont}</div>
+                                                        </td>
+                                                        <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
+                                                            <div className="w-[96px]">{car.Password}</div>
+                                                        </td>
+                                                        <td className="px-5 py-3 border-b font-semibold text-[12px] break-words">
+                                                            <div className="flex">
+                                                                <div className="mr-[10px]" onClick={() => updateCar(car)}>
+                                                                    <lord-icon
+                                                                        src="https://cdn.lordicon.com/oqaajvyl.json"
+                                                                        trigger="hover"
+                                                                        style={{ "width": "20px", "height": "20px" }}
+                                                                    ></lord-icon>
+                                                                </div>
+                                                                <div className="mr-[10px]" onClick={() => deleteCar(car.id)}>
+                                                                    <lord-icon
+                                                                        src="https://cdn.lordicon.com/vlnvqvew.json"
+                                                                        trigger="hover"
+                                                                        style={{ "width": "20px", "height": "20px" }}
+                                                                    ></lord-icon>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
                             ) : (
                                 <table className="w-full h-full text-sm text-left text-gray-500 border-collapse table-fixed rounded-tl-[12px] rounded-tr-[12px]">
                                     <thead className="bg-gray-100 w-full">
@@ -1119,8 +1141,21 @@ try {
                                 </span>
                             )}
                             {isChildExpanded ? (
-                                <table className="w-full h-full text-sm text-left text-gray-800 border-collapse table-fixed">
-                                    <thead className="bg-gray-100">
+                                
+                                <div>
+                                    <div className="">
+                                        <input
+                                        type="text"
+                                        placeholder="Search by student name..."
+                                        className="w-full pl-[15px] py-[10px] border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        value={searchQuery}
+                                        onChange={handleSearchChange}
+                                        />
+                                    </div>
+
+                                    
+                                    <table className="w-full h-full text-sm text-left text-gray-800 border-collapse table-fixed">
+                                        <thead className="bg-gray-100">
                                         <tr>
                                             <th className="px-6 py-3 border-b border-gray-300 w-1/4">Student</th>
                                             <th className="px-6 py-3 border-b border-gray-300 w-1/4">School</th>
@@ -1130,67 +1165,70 @@ try {
                                             <th className="px-6 py-3 border-b border-gray-300 w-1/4">Edit Stat</th>
                                             <th className="px-6 py-3 border-b border-gray-300 w-1/4">Edit</th>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {students.length > 0 ? (
-                                            students.map((student) => (
-                                                <tr key={student.id} className="hover:bg-gray-200">
-                                                    <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
-                                                        <div className="w-[120px]" onClick={() => handleChildClick(student.id)}>{student.Child}</div>
-                                                    </td>
-                                                    <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
-                                                        <div className="w-[120px]">{student.School || 'N/A'}</div>
-                                                    </td>
-                                                    <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
-                                                        <div className="w-[120px]">{student.Contact || 'N/A'}</div>
-                                                    </td>
-                                                    <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
-                                                        <div className="w-[120px]">{student.License || 'N/A'}</div>
-                                                    </td>
-                                                    <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
-                                                        <div className="w-[120px]">{student.Address || 'N/A'}</div>
-                                                    </td>
-                                                    <td className="px-3 md:pl-[1.9rem] pr-[20px] md:pr-[40px] py-2 md:py-4">
-                                                    <select
-                                                        className="border rounded-md w-[80px] md:w-[100px] lg:w-[77px] h-8 md:h-9 lg:h-10 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs md:text-sm lg:text-base"
-                                                        onChange={(e) => handleStatusChange(student.id, e)}
-                                                        value={student.Status}
-                                                    >
-                                                        <option value="ToSchool">To School</option>
-                                                        <option value="AtSchool">At School</option>
-                                                        <option value="ToHome">To Home</option>
-                                                        <option value="AtHome">At Home</option>
-                                                    </select>
-                                                    </td>
-                                                    <td className="pl-5 pr-[5.25rem]  py-3 border-b font-semibold text-[12px] break-words">
-                                                        <div className="flex justify-center">
-                                                            <div className="mr-[10px]" onClick={() => updateStudent(student)}>
-                                                                <lord-icon
-                                                                    src="https://cdn.lordicon.com/oqaajvyl.json"
-                                                                    trigger="hover"
-                                                                    style={{ "width": "20px", "height": "20px" }}
-                                                                ></lord-icon>
-                                                            </div>
-                                                            <div className="mr-[10px]" onClick={() => deleteStudent(student.id)}>
-                                                                <lord-icon
-                                                                    src="https://cdn.lordicon.com/vlnvqvew.json"
-                                                                    trigger="hover"
-                                                                    style={{ "width": "20px", "height": "20px" }}
-                                                                ></lord-icon>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                        </thead>
+                                        <tbody>
+                                        {filteredStudents.length > 0 ? (
+                                            filteredStudents.map((student) => (
+                                            <tr key={student.id} className="hover:bg-gray-200">
+                                                <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
+                                                <div className="w-[120px]" onClick={() => handleChildClick(student.id)}>
+                                                    {student.Child}
+                                                </div>
+                                                </td>
+                                                <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
+                                                <div className="w-[120px]">{student.School || "N/A"}</div>
+                                                </td>
+                                                <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
+                                                <div className="w-[120px]">{student.Contact || "N/A"}</div>
+                                                </td>
+                                                <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
+                                                <div className="w-[120px]">{student.License || "N/A"}</div>
+                                                </td>
+                                                <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
+                                                <div className="w-[120px]">{student.Address || "N/A"}</div>
+                                                </td>
+                                                <td className="px-3 md:pl-[1.9rem] pr-[20px] md:pr-[40px] py-2 md:py-4">
+                                                <select
+                                                    className="border rounded-md w-[80px] md:w-[100px] lg:w-[77px] h-8 md:h-9 lg:h-10 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs md:text-sm lg:text-base"
+                                                    onChange={(e) => handleStatusChange(student.id, e)}
+                                                    value={student.Status}
+                                                >
+                                                    <option value="ToSchool">To School</option>
+                                                    <option value="AtSchool">At School</option>
+                                                    <option value="ToHome">To Home</option>
+                                                    <option value="AtHome">At Home</option>
+                                                </select>
+                                                </td>
+                                                <td className="pl-5 pr-[5.25rem] py-3 border-b font-semibold text-[12px] break-words">
+                                                <div className="flex justify-center">
+                                                    <div className="mr-[10px]" onClick={() => updateStudent(student)}>
+                                                    <lord-icon
+                                                        src="https://cdn.lordicon.com/oqaajvyl.json"
+                                                        trigger="hover"
+                                                        style={{ width: "20px", height: "20px" }}
+                                                    ></lord-icon>
+                                                    </div>
+                                                    <div className="mr-[10px]" onClick={() => deleteStudent(student.id)}>
+                                                    <lord-icon
+                                                        src="https://cdn.lordicon.com/vlnvqvew.json"
+                                                        trigger="hover"
+                                                        style={{ width: "20px", height: "20px" }}
+                                                    ></lord-icon>
+                                                    </div>
+                                                </div>
+                                                </td>
+                                            </tr>
                                             ))
                                         ) : (
                                             <tr>
-                                                <td colSpan={6} className="px-5 py-3 text-center font-semibold text-gray-500">
-                                                    No students added yet.
-                                                </td>
+                                            <td colSpan="7" className="text-center py-3">
+                                                No students found.
+                                            </td>
                                             </tr>
                                         )}
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
 
                             ) : (
                                 <table className="w-full h-full text-sm text-left text-gray-500 border-collapse table-fixed">
