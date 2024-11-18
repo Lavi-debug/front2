@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react"
 
-const Admincopycopy = () => {
-    const host = "https://logi-52ys.onrender.com"; //http://localhost:5000
+const Admincopy = () => {
+    const host = "http://localhost:5000"; //http://localhost:5000
     const mapRef = useRef(null);
     const markerRef = useRef(null); // Create a ref for the marker+-
     const mapInstance = useRef(null);
@@ -15,8 +15,6 @@ const Admincopycopy = () => {
     const ref = useRef(null);
     const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
     const toggleStudentModal = () => setIsStudentModalOpen(!isStudentModalOpen);
-    const [modalOpen, setModalOpen] = React.useState(false);
-    const [modalData, setModalData] = React.useState([]);
 
     const [isDriverExpanded, setIsDriverExpanded] = useState(false);
     const [isAdcrExpanded, setIsAdcrExpanded] = useState(false);
@@ -571,130 +569,6 @@ const Admincopycopy = () => {
 
 
 
-    const fetchStatusHistory = async (id) => {
-        try {
-        const response = await fetch(`${host}/api/student/getStatusHistory/${id}`, {
-            method: "GET",
-        });
-    
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status} - ${response.statusText}`);
-        }
-    
-        const data = await response.json();
-        return data.history; // Return the fetched history
-        } catch (error) {
-        console.error(`Failed to fetch status history for student ID ${id}:`, error.message);
-        return []; // Return an empty array on failure
-        }
-    };
-      
-    const handleChildClick = async (id) => {
-    try {
-        const history = await fetchStatusHistory(id); // Fetch the history
-        setModalData(history); // Update modal data state
-        setModalOpen(true); // Open the modal
-    } catch (error) {
-        console.error("Error fetching history:", error.message);
-    }
-    };
-
-    const closehistoryModal = () => setModalOpen(false);
-
-
-
-
-    const handleStatusChange = (studentId, event) => {
-        const newStatus = event.target.value;
-        updateStudentStatus(studentId, newStatus);
-        updateModal(studentId, newStatus);
-        addHistory(studentId, newStatus);
-        };
-
-    const updateStudentStatus = async (studentId, newStatus) => {
-            try {
-            const now = new Date();
-            const options = { day: 'numeric', month: 'long', hour: 'numeric', minute: 'numeric', hour12: true };
-            const formattedTime = new Intl.DateTimeFormat('en-US', options).format(now);
-            
-            const response = await fetch(`${host}/api/student/updatestatus/${studentId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ Status: newStatus, Time: formattedTime }),
-            });
-            if (!response.ok) throw new Error(`Server error: ${response.status}`);
-            
-            setStudents((prev) =>
-                prev.map((student) =>
-                student.id === studentId ? { ...student, Status: newStatus, Time: formattedTime } : student
-                )
-            );
-            } catch (error) {
-            console.error("Error updating student status:", error.message);
-            }
-        };
-    
-    const addHistory = async (studentId, newStatus) => {
-try {
-    const now = new Date();
-    
-    // Format the time for display (e.g., "November 15, 2024 2:30 PM")
-    const options = { day: 'numeric', month: 'long', hour: 'numeric', minute: 'numeric', hour12: true };
-    const formattedTime = new Intl.DateTimeFormat('en-US', options).format(now);
-    
-    // Get the standard format for database storage (e.g., "2024-11-15 14:30:00")
-    const standardTime = now.toISOString().slice(0, 19).replace('T', ' '); // Remove the milliseconds part and replace 'T' with space
-
-    const response = await fetch(`${host}/api/student/addStatusHistory/${studentId}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ Status: newStatus, Time: formattedTime, Current: standardTime }),
-    });
-    
-    if (!response.ok) throw new Error(`Server error: ${response.status}`);
-    
-} catch (error) {
-    console.error("Error adding student history:", error.message);
-}
-        };
-    const updateModal = async (studentId, status) => {
-        try {
-            const now = new Date();
-            const options = {
-                day: 'numeric',
-                month: 'long',
-                hour: 'numeric',
-                minute: 'numeric',
-                hour12: true,
-            }; // Capture the exact time when the function is called
-            const formattedTime = new Intl.DateTimeFormat('en-US', options).format(now);
-            const response = await fetch(`http://localhost:5000/api/student/updateStudentStatus/${studentId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    Status: status,
-                    Time: formattedTime // Send the captured current time
-                })
-            });
-        
-            const data = await response.json();
-        
-            if (response.ok) {
-                console.log(`Student status updated successfully: ${data.message}`);
-                // You can update your UI here if needed
-            } else {
-                console.error(`Error: ${data.error}`);
-            }
-        } catch (error) {
-            console.error("Error updating student status:", error);
-        }
-        };
-    
-
-
-
 //Functions to handle Alert
 
     //Function to show the alert
@@ -720,37 +594,6 @@ try {
     useEffect(() => {
         getCars();
     }, [])
-
-    useEffect(() => {
-        // Run getCars once when the component mounts
-        getCars();
-    
-        // Set up the interval to run getCars every 2 seconds (2000 milliseconds)
-        const intervalId = setInterval(() => {
-          getCars();
-        }, 2000);
-    
-        // Clean up the interval on component unmount
-        return () => clearInterval(intervalId);
-      }, []); // Empty dependency array ensures this effect runs only once
-
-
-      const [searchQuery, setSearchQuery] = useState("");
-
-      const handleSearchChange = (e) => {
-        setSearchQuery(e.target.value.toLowerCase());
-      };
-    
-      const filteredStudents = students.filter((student) =>
-        student.Child.toLowerCase().includes(searchQuery)
-      );
-    
-     
-      
-      const filteredCars = cars.filter((car) =>
-        car.driverName.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      
 
     
 
@@ -932,7 +775,6 @@ try {
                                         <th className="px-6 py-3 border-b border-gray-300 w-1/4">Driver Name</th>
                                         <th className="px-6 py-3 border-b border-gray-300 w-1/4">Car Name</th>
                                         <th className="px-6 py-3 border-b border-gray-300 w-1/4">License</th>
-                                        <th className="px-6 py-3 border-b border-gray-300 w-1/4">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -940,27 +782,15 @@ try {
                                         const coords = car.Coords || { lat: "N/A", lng: "N/A" };
 
                                         return (
-                                            <tr key={car.id} className="hover:bg-gray-200" onClick={() => getCarDetails(car.License)}>
-                                                <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
-                                                    <div className="w-full">{car.driverName}</div>
-                                                </td>
-                                                <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
-                                                    <div className="w-full">{car.carName}</div>
-                                                </td>
-                                                <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
-                                                    <div className="w-full">{car.License}</div>
-                                                </td>
-                                                <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
-                                                    <div className="flex items-center">
-                                                    <span
-                                                        className={`w-3 h-3 rounded-full mr-2 ${
-                                                        car.Status === "online" ? "bg-green-500" : "bg-gray-400"
-                                                        }`}
-                                                    ></span>
-                                                    <span>{car.Status}</span>
-                                                    </div>
-                                                </td>
-                                             </tr>
+                                            <tr
+                                                key={car.id}
+                                                className="hover:bg-gray-200"
+                                                onClick={() => getCarDetails(car.License)} // Fetch car coordinates on row click
+                                            >
+                                                <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words"><div className="w-full">{car.driverName}</div></td>
+                                                <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words"><div className="w-full">{car.carName}</div></td>
+                                                <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words"><div className="w-full">{car.License}</div></td>
+                                            </tr>
                                         );
                                     })}
                                 </tbody>
@@ -1007,82 +837,70 @@ try {
                                 </span>
                             )}
                             {isDriverExpanded ? (
-
-                                <div>
-                                    <div className="">
-                                        <input
-                                            type="text"
-                                            placeholder="Search by driver name"
-                                            value={searchQuery}
-                                            onChange={(e) => setSearchQuery(e.target.value)}
-                                            className="w-full pl-[15px] py-[10px] border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        />
-                                    </div>
-
-                                    <table className="w-full h-full text-sm text-left text-gray-500 border-collapse">
-                                        <thead className="bg-gray-100">
+                                <table className="w-full h-full text-sm text-left text-gray-500 border-collapse">
+                                    <thead className="bg-gray-100">
+                                        <tr>
+                                            <th className="px-6 py-3 border-b"><h1>Car Name</h1></th>
+                                            <th className="px-6 py-3 border-b"><h1>License</h1></th>
+                                            <th className="px-6 py-3 border-b"><h1>Seats</h1></th>
+                                            <th className="px-6 py-3 border-b"><h1>Driver</h1></th>
+                                            <th className="px-6 py-3 border-b"><h1>Contact</h1></th>
+                                            <th className="px-6 py-3 border-b"><h1>Password</h1></th>
+                                            <th className="px-6 py-3 border-b"><h1>Edit</h1></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {cars.length === 0 ? (
                                             <tr>
-                                                <th className="px-6 py-3 border-b"><h1>Car Name</h1></th>
-                                                <th className="px-6 py-3 border-b"><h1>License</h1></th>
-                                                <th className="px-6 py-3 border-b"><h1>Seats</h1></th>
-                                                <th className="px-6 py-3 border-b"><h1>Driver</h1></th>
-                                                <th className="px-6 py-3 border-b"><h1>Contact</h1></th>
-                                                <th className="px-6 py-3 border-b"><h1>Password</h1></th>
-                                                <th className="px-6 py-3 border-b"><h1>Edit</h1></th>
+                                                <td colSpan="7" className="px-5 py-3 text-center font-semibold text-red-500">
+                                                    No cars assigned yet.
+                                                </td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            {filteredCars.length === 0 ? (
-                                                <tr>
-                                                    <td colSpan="7" className="px-5 py-3 text-center font-semibold text-red-500">
-                                                        No cars match the search criteria.
+                                        ) : (
+                                            cars.map((car) => (
+                                                <tr key={car.id} className="hover:bg-gray-50">
+                                                    <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
+                                                        <div className="w-[96px]">{car.carName}</div>
+                                                    </td>
+                                                    <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
+                                                        <div className="w-[96px]">{car.License}</div>
+                                                    </td>
+                                                    <td className="px-5 py-3 border-b font-semibold text-[12px] w-[100px] break-words">
+                                                        <div className="w-[96px]">{car.Seats}</div>
+                                                    </td>
+                                                    <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
+                                                        <div className="w-[96px]">{car.driverName}</div>
+                                                    </td>
+                                                    <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
+                                                        <div className="w-[96px]">{car.driverCont}</div>
+                                                    </td>
+                                                    <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
+                                                        <div className="w-[96px]">{car.Password}</div>
+                                                    </td>
+                                                    <td className="px-5 py-3 border-b font-semibold text-[12px] break-words">
+                                                        <div className="flex">
+                                                            <div className="mr-[10px]" onClick={() => updateCar(car)}>
+                                                                <lord-icon
+                                                                    src="https://cdn.lordicon.com/oqaajvyl.json"
+                                                                    trigger="hover"
+                                                                    style={{ "width": "20px", "height": "20px" }}
+                                                                ></lord-icon>
+                                                            </div>
+                                                            <div className="mr-[10px]" onClick={() => deleteCar(car.id)}>
+                                                                <lord-icon
+                                                                    src="https://cdn.lordicon.com/vlnvqvew.json"
+                                                                    trigger="hover"
+                                                                    style={{ "width": "20px", "height": "20px" }}
+                                                                ></lord-icon>
+                                                            </div>
+                                                        </div>
                                                     </td>
                                                 </tr>
-                                            ) : (
-                                                filteredCars.map((car) => (
-                                                    <tr key={car.id} className="hover:bg-gray-50">
-                                                        <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
-                                                            <div className="w-[96px]">{car.carName}</div>
-                                                        </td>
-                                                        <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
-                                                            <div className="w-[96px]">{car.License}</div>
-                                                        </td>
-                                                        <td className="px-5 py-3 border-b font-semibold text-[12px] w-[100px] break-words">
-                                                            <div className="w-[96px]">{car.Seats}</div>
-                                                        </td>
-                                                        <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
-                                                            <div className="w-[96px]">{car.driverName}</div>
-                                                        </td>
-                                                        <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
-                                                            <div className="w-[96px]">{car.driverCont}</div>
-                                                        </td>
-                                                        <td className="px-5 py-3 border-b font-semibold text-[12px] w-[150px] break-words">
-                                                            <div className="w-[96px]">{car.Password}</div>
-                                                        </td>
-                                                        <td className="px-5 py-3 border-b font-semibold text-[12px] break-words">
-                                                            <div className="flex">
-                                                                <div className="mr-[10px]" onClick={() => updateCar(car)}>
-                                                                    <lord-icon
-                                                                        src="https://cdn.lordicon.com/oqaajvyl.json"
-                                                                        trigger="hover"
-                                                                        style={{ "width": "20px", "height": "20px" }}
-                                                                    ></lord-icon>
-                                                                </div>
-                                                                <div className="mr-[10px]" onClick={() => deleteCar(car.id)}>
-                                                                    <lord-icon
-                                                                        src="https://cdn.lordicon.com/vlnvqvew.json"
-                                                                        trigger="hover"
-                                                                        style={{ "width": "20px", "height": "20px" }}
-                                                                    ></lord-icon>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                ))
-                                            )}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                            ))
+                                        )}
+                                    </tbody>
+
+                                </table>
                             ) : (
                                 <table className="w-full h-full text-sm text-left text-gray-500 border-collapse table-fixed rounded-tl-[12px] rounded-tr-[12px]">
                                     <thead className="bg-gray-100 w-full">
@@ -1123,7 +941,7 @@ try {
 
                         {/* Children div */}
                         <div
-                            className={`chlddata ${isChildExpanded ? 'w-full absolute right-0' : 'w-[56%] relative'} h-full transition-all duration-500 overflow-y-auto overflow-x-auto scrollbar-hidden bg-white rounded-[12px] border-[1px] border-black`}
+                            className={`chlddata ${isChildExpanded ? 'w-full absolute right-0' : 'w-[56%] relative'} h-full transition-all duration-500 overflow-y-auto scrollbar-hidden bg-white rounded-[12px] border-[1px] border-black`}
                             onClick={!isChildExpanded ? handleChildExpand : undefined}
                             style={{ zIndex: isChildExpanded ? 10 : 'auto' }}
                         >
@@ -1141,94 +959,65 @@ try {
                                 </span>
                             )}
                             {isChildExpanded ? (
-                                
-                                <div>
-                                    <div className="">
-                                        <input
-                                        type="text"
-                                        placeholder="Search by student name..."
-                                        className="w-full pl-[15px] py-[10px] border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        value={searchQuery}
-                                        onChange={handleSearchChange}
-                                        />
-                                    </div>
-
-                                    
-                                    <table className="w-full h-full text-sm text-left text-gray-800 border-collapse table-fixed">
-                                        <thead className="bg-gray-100">
+                                <table className="w-full h-full text-sm text-left text-gray-800 border-collapse table-fixed">
+                                    <thead className="bg-gray-100">
                                         <tr>
                                             <th className="px-6 py-3 border-b border-gray-300 w-1/4">Student</th>
                                             <th className="px-6 py-3 border-b border-gray-300 w-1/4">School</th>
                                             <th className="px-6 py-3 border-b border-gray-300 w-1/4">Parents Cont.</th>
-                                            <th className="px-6 py-3 border-b border-gray-300 w-1/4">License</th>
                                             <th className="px-6 py-3 border-b border-gray-300 w-1/4">Address</th>
-                                            <th className="px-6 py-3 border-b border-gray-300 w-1/4">Edit Stat</th>
+                                            <th className="px-6 py-3 border-b border-gray-300 w-1/4">Status</th>
                                             <th className="px-6 py-3 border-b border-gray-300 w-1/4">Edit</th>
                                         </tr>
-                                        </thead>
-                                        <tbody>
-                                        {filteredStudents.length > 0 ? (
-                                            filteredStudents.map((student) => (
-                                            <tr key={student.id} className="hover:bg-gray-200">
-                                                <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
-                                                <div className="w-[120px]" onClick={() => handleChildClick(student.id)}>
-                                                    {student.Child}
-                                                </div>
-                                                </td>
-                                                <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
-                                                <div className="w-[120px]">{student.School || "N/A"}</div>
-                                                </td>
-                                                <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
-                                                <div className="w-[120px]">{student.Contact || "N/A"}</div>
-                                                </td>
-                                                <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
-                                                <div className="w-[120px]">{student.License || "N/A"}</div>
-                                                </td>
-                                                <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
-                                                <div className="w-[120px]">{student.Address || "N/A"}</div>
-                                                </td>
-                                                <td className="px-3 md:pl-[1.9rem] pr-[20px] md:pr-[40px] py-2 md:py-4">
-                                                <select
-                                                    className="border rounded-md w-[80px] md:w-[100px] lg:w-[77px] h-8 md:h-9 lg:h-10 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs md:text-sm lg:text-base"
-                                                    onChange={(e) => handleStatusChange(student.id, e)}
-                                                    value={student.Status}
-                                                >
-                                                    <option value="ToSchool">To School</option>
-                                                    <option value="AtSchool">At School</option>
-                                                    <option value="ToHome">To Home</option>
-                                                    <option value="AtHome">At Home</option>
-                                                </select>
-                                                </td>
-                                                <td className="pl-5 pr-[5.25rem] py-3 border-b font-semibold text-[12px] break-words">
-                                                <div className="flex justify-center">
-                                                    <div className="mr-[10px]" onClick={() => updateStudent(student)}>
-                                                    <lord-icon
-                                                        src="https://cdn.lordicon.com/oqaajvyl.json"
-                                                        trigger="hover"
-                                                        style={{ width: "20px", height: "20px" }}
-                                                    ></lord-icon>
-                                                    </div>
-                                                    <div className="mr-[10px]" onClick={() => deleteStudent(student.id)}>
-                                                    <lord-icon
-                                                        src="https://cdn.lordicon.com/vlnvqvew.json"
-                                                        trigger="hover"
-                                                        style={{ width: "20px", height: "20px" }}
-                                                    ></lord-icon>
-                                                    </div>
-                                                </div>
-                                                </td>
-                                            </tr>
+                                    </thead>
+                                    <tbody>
+                                        {students.length > 0 ? (
+                                            students.map((student) => (
+                                                <tr key={student.id} className="hover:bg-gray-200">
+                                                    <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
+                                                        <div className="w-[120px]">{student.Child}</div>
+                                                    </td>
+                                                    <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
+                                                        <div className="w-[120px]">{student.School || 'N/A'}</div>
+                                                    </td>
+                                                    <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
+                                                        <div className="w-[120px]">{student.Contact || 'N/A'}</div>
+                                                    </td>
+                                                    <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
+                                                        <div className="w-[120px]">{student.Address || 'N/A'}</div>
+                                                    </td>
+                                                    <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
+                                                        <div className="w-[120px]">{student.Status}</div>
+                                                    </td>
+                                                    <td className="px-5 py-3 border-b font-semibold text-[12px] break-words">
+                                                        <div className="flex justify-center">
+                                                            <div className="mr-[10px]" onClick={() => updateStudent(student)}>
+                                                                <lord-icon
+                                                                    src="https://cdn.lordicon.com/oqaajvyl.json"
+                                                                    trigger="hover"
+                                                                    style={{ "width": "20px", "height": "20px" }}
+                                                                ></lord-icon>
+                                                            </div>
+                                                            <div className="mr-[10px]" onClick={() => deleteStudent(student.id)}>
+                                                                <lord-icon
+                                                                    src="https://cdn.lordicon.com/vlnvqvew.json"
+                                                                    trigger="hover"
+                                                                    style={{ "width": "20px", "height": "20px" }}
+                                                                ></lord-icon>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                             ))
                                         ) : (
                                             <tr>
-                                            <td colSpan="7" className="text-center py-3">
-                                                No students found.
-                                            </td>
+                                                <td colSpan={6} className="px-5 py-3 text-center font-semibold text-gray-500">
+                                                    No students added yet.
+                                                </td>
                                             </tr>
                                         )}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    </tbody>
+                                </table>
 
                             ) : (
                                 <table className="w-full h-full text-sm text-left text-gray-500 border-collapse table-fixed">
@@ -1269,38 +1058,6 @@ try {
                                     </tbody>
                                 </table>
                             )}
-
-                            {modalOpen && (
-                                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                                    <div className="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full">
-                                    <h2 className="text-lg font-bold mb-4">Status History</h2>
-                                    <div className="overflow-auto max-h-96">
-                                        <table className="w-full border-collapse border border-gray-200">
-                                        <thead>
-                                            <tr className="bg-gray-100">
-                                            <th className="border border-gray-300 px-4 py-2 text-left">Status</th>
-                                            <th className="border border-gray-300 px-4 py-2 text-left">Time</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {modalData.map((record, index) => (
-                                            <tr key={index} className="hover:bg-gray-50">
-                                                <td className="border border-gray-300 px-4 py-2">{record.Status}</td>
-                                                <td className="border border-gray-300 px-4 py-2">{record.Time}</td>
-                                            </tr>
-                                            ))}
-                                        </tbody>
-                                        </table>
-                                    </div>
-                                    <button
-                                        onClick={closehistoryModal}
-                                        className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-                                    >
-                                        Close
-                                    </button>
-                                    </div>
-                                </div>
-                                )}
                         </div>
 
                     </div>
