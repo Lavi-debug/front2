@@ -583,7 +583,7 @@ const Logindriver = () => {
 
   useEffect(() => {
     // Check localStorage to persist login state
-    const storedLicense = localStorage.getItem('license');
+    const storedLicense = localStorage.getItem('Dlicense');
     if (storedLicense) {
       setLicense(storedLicense);
       setIsLoggedIn(true);
@@ -639,7 +639,7 @@ const Logindriver = () => {
         setErrorMessage("");
 
         // Store license in localStorage
-        localStorage.setItem('license', license);
+        localStorage.setItem('Dlicense', license);
 
         // Update status to online
         await updateStatus("online");
@@ -656,7 +656,7 @@ const Logindriver = () => {
     setIsLoggedIn(false);
 
     // Clear localStorage
-    localStorage.removeItem('license');
+    localStorage.removeItem('Dlicense');
 
     // Update status to offline
     await updateStatus("offline");
