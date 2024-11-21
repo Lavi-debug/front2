@@ -14,45 +14,18 @@ const Driver = ({ license, onLogout }) => {
   const [modalData, setModalData] = React.useState([]);
   const watchIdRef = useRef(null);
   const scannerRef = useRef(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  let wakeLock = null;
 
-// Request a wake lock
-async function requestWakeLock() {
-  try {
-    if ('wakeLock' in navigator) {
-      wakeLock = await navigator.wakeLock.request('screen');
-      console.log('Wake lock is active');
-    } else {
-      console.log('Screen Wake Lock API is not supported in this browser.');
-    }
-  } catch (err) {
-    console.error(`Wake lock request failed: ${err.name}, ${err.message}`);
-  }
-}
+  const filteredStudents = students.filter((student) =>
+    student.Child.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-// Release the wake lock
-async function releaseWakeLock() {
-  if (wakeLock) {
-    await wakeLock.release();
-    wakeLock = null;
-    console.log('Wake lock is released');
-  }
-}
 
-// Handle visibility changes
-document.addEventListener('visibilitychange', () => {
-  if (wakeLock !== null && document.visibilityState === 'visible') {
-    requestWakeLock();
-  }
-});
-
-// Request the wake lock when the page loads
-window.addEventListener('load', requestWakeLock);
-
-// Clean up on page unload
-window.addEventListener('unload', releaseWakeLock);
-
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
   const fetchStudents = async () => {
     try {
@@ -477,6 +450,69 @@ useEffect(() => {
               No students assigned to this bus.
             </div>
           ) : (
+            // <table className="w-full text-xs md:text-sm lg:text-base text-left rtl:text-right text-gray-500">
+            //   <thead className="text-xs md:text-sm lg:text-base text-gray-700 uppercase bg-gray-50">
+            //     <tr>
+            //       <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
+            //         Student
+            //       </th>
+            //       <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
+            //         School
+            //       </th>
+            //       <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
+            //         Residence
+            //       </th>
+            //       <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
+            //         Pt. Contact
+            //       </th>
+            //       <th scope="col" className="px-3 md:pl-6 pr-[20px] md:pr-[40px] py-2 md:py-3 lg:py-4 sticky top-0 bg-gray-50">
+            //         Status
+            //       </th>
+            //     </tr>
+            //   </thead>
+            //   <tbody>
+            //     {students.map((student) => (
+            //       <tr key={student.id} className="bg-white border-b hover:bg-gray-50">
+            //         <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base" onClick={() => handleChildClick(student.id)}>
+            //           {student.Child}
+            //         </td>
+            //         <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base">
+            //           {student.School}
+            //         </td>
+            //         <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base">
+            //           {student.Address}
+            //         </td>
+            //         <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base">
+            //           {student.Contact}
+            //         </td>
+            //         <td className="px-3 md:pl-6 pr-[20px] md:pr-[40px] py-2 md:py-4">
+            //           <select
+            //             className="border rounded-md w-[80px] md:w-[100px] lg:w-[120px] h-8 md:h-9 lg:h-10 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs md:text-sm lg:text-base"
+            //             onChange={(e) => handleStatusChange(student.id, e)}
+            //             value={student.Status}
+            //           >
+            //             <option value="ToSchool">To School</option>
+            //             <option value="AtSchool">At School</option>
+            //             <option value="ToHome">To Home</option>
+            //             <option value="AtHome">At Home</option>
+            //           </select>
+            //         </td>
+            //       </tr>
+            //     ))}
+            //   </tbody>
+            // </table>
+
+            <div>
+            {/* Search Bar */}
+            <input
+              type="text"
+              placeholder="Search by student name"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className=" p-2 border rounded-md w-full md:w-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            
+            {/* Table */}
             <table className="w-full text-xs md:text-sm lg:text-base text-left rtl:text-right text-gray-500">
               <thead className="text-xs md:text-sm lg:text-base text-gray-700 uppercase bg-gray-50">
                 <tr>
@@ -498,7 +534,7 @@ useEffect(() => {
                 </tr>
               </thead>
               <tbody>
-                {students.map((student) => (
+                {filteredStudents.map((student) => (
                   <tr key={student.id} className="bg-white border-b hover:bg-gray-50">
                     <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base" onClick={() => handleChildClick(student.id)}>
                       {student.Child}
@@ -528,6 +564,7 @@ useEffect(() => {
                 ))}
               </tbody>
             </table>
+          </div>
           )}
         </div>
       </div>

@@ -662,6 +662,89 @@ const Logindriver = () => {
     await updateStatus("offline");
   };
 
+
+  // async function checkBusStatus(license) {
+  //   try {
+  //     // Call the /getstatus/:license endpoint
+  //     const response = await fetch(`${host}/api/auth/getstatus/${license}`);
+  
+  //     // Check if the response is OK
+  //     if (!response.ok) {
+  //       const errorData = await response.json();
+  //       throw new Error(errorData.error || "Failed to fetch status");
+  //     }
+  
+  //     // Parse the response data
+  //     const data = await response.json();
+  //     const { status } = data;
+  
+  //     // Log the bus status
+  //     console.log(`The bus with license ${license} is ${status}`);
+  
+  //   } catch (error) {
+  //     console.error("Error checking bus status:", error.message);
+  //   }
+  // }
+
+
+  async function checkBusStatus(license) {
+    try {
+      // Call the /getstatus/:license endpoint
+      const response = await fetch(`${host}/api/auth/getstatus/${license}`);
+  
+      // Check if the response is OK
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to fetch status");
+      }
+  
+      // Parse the response data
+      const data = await response.json();
+      const { status } = data;
+  
+      // Log the bus status
+      if (status === "offline") {
+        // console.log(`The bus with license ${license} is offline.`);
+        setIsLoggedIn(false);
+
+    // Clear localStorage
+    localStorage.removeItem('Dlicense');
+      } else {
+        console.log(`The bus with license ${license} is ${status}.`);
+      }
+  
+    } catch (error) {
+      console.error("Error checking bus status:", error.message);
+    }
+  }
+  
+  // Example usage
+  // checkBusStatus(license);
+
+
+  useEffect(() => {
+    // Define the function to check the bus status
+    checkBusStatus(license);
+
+    // Delay the first call by 10 seconds (10000 milliseconds)
+    const timeoutId = setTimeout(() => {
+      checkBusStatus(license);
+    }, 5000);
+
+    // Set an interval to call the function every 4 seconds after the first call
+    const intervalId = setInterval(() => checkBusStatus(license), 4000);
+
+    // Cleanup the interval and timeout when the component unmounts
+    return () => {
+      clearTimeout(timeoutId);  // Clear the timeout
+      clearInterval(intervalId); // Clear the interval
+    };
+  }, [license]); // This effect depends on the license parameter
+
+  
+
+
+
   return (
     <div className="login-container flex items-center justify-center min-h-screen bg-[#b5c2ca] p-4">
       {!isLoggedIn ? (

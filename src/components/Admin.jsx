@@ -851,6 +851,41 @@ try {
       const filteredCars = cars.filter((car) =>
         car.driverName.toLowerCase().includes(searchQuery.toLowerCase())
       );
+
+
+      async function setStatusToOffline(license) {
+        try {
+            const response = await fetch(`${host}/api/auth/updatestatus/${license}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ Status: "offline" }),
+            });
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || "Failed to update status");
+            }
+    
+            const data = await response.json();
+            console.log("Status updated successfully:", data);
+            return data; // Return response data for further use if needed
+        } catch (error) {
+            console.error("Error updating status:", error.message);
+        }
+    }
+
+    const logout = (license) => {
+        setStatusToOffline(license)
+    .then(data => {
+        console.log("Status update result:", data);
+    })
+    .catch(error => {
+        console.error("Failed to set status:", error);
+    });
+    }
+    
       
 
     
@@ -1044,6 +1079,7 @@ try {
                                         <th className="px-6 py-3 border-b border-gray-300 w-1/4">Car Name</th>
                                         <th className="px-6 py-3 border-b border-gray-300 w-1/4">License</th>
                                         <th className="px-6 py-3 border-b border-gray-300 w-1/4">Status</th>
+                                        <th className="px-6 py-3 border-b border-gray-300 w-1/4">LogOut</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1069,6 +1105,11 @@ try {
                                                         }`}
                                                     ></span>
                                                     <span>{car.Status}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
+                                                    <div className="w-full" >
+                                                        <button onClick={() => logout(car.License)} className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 text-center ">Log Out</button>
                                                     </div>
                                                 </td>
                                              </tr>
