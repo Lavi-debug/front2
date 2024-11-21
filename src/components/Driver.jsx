@@ -15,6 +15,44 @@ const Driver = ({ license, onLogout }) => {
   const watchIdRef = useRef(null);
   const scannerRef = useRef(null);
 
+  let wakeLock = null;
+
+// Request a wake lock
+async function requestWakeLock() {
+  try {
+    if ('wakeLock' in navigator) {
+      wakeLock = await navigator.wakeLock.request('screen');
+      console.log('Wake lock is active');
+    } else {
+      console.log('Screen Wake Lock API is not supported in this browser.');
+    }
+  } catch (err) {
+    console.error(`Wake lock request failed: ${err.name}, ${err.message}`);
+  }
+}
+
+// Release the wake lock
+async function releaseWakeLock() {
+  if (wakeLock) {
+    await wakeLock.release();
+    wakeLock = null;
+    console.log('Wake lock is released');
+  }
+}
+
+// Handle visibility changes
+document.addEventListener('visibilitychange', () => {
+  if (wakeLock !== null && document.visibilityState === 'visible') {
+    requestWakeLock();
+  }
+});
+
+// Request the wake lock when the page loads
+window.addEventListener('load', requestWakeLock);
+
+// Clean up on page unload
+window.addEventListener('unload', releaseWakeLock);
+
 
   const fetchStudents = async () => {
     try {

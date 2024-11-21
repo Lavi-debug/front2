@@ -683,6 +683,9 @@ const handleChildClick = async (id) => {
                   <div className="w-1/4 px-2 py-3 md:px-6 md:py-4 flex justify-center items-center text-gray-900 font-medium">
                     <div className="w-[100px] break-words text-center">Status</div>
                   </div>
+                  {/* <div className="w-1/4 px-2 py-3 md:px-6 md:py-4 flex justify-center items-center text-gray-900 font-medium">
+                    <div className="w-[100px] break-words text-center">Location</div>
+                  </div> */}
                   <div className="w-1/4 px-2 py-3 md:px-6 md:py-4 flex justify-center items-center text-gray-900 font-medium">
                     <div className="w-[100px] break-words text-center">Time</div>
                   </div>
@@ -725,6 +728,14 @@ const handleChildClick = async (id) => {
                         <h1 className="text-[10px] md:text-xs font-medium">{student.Status}</h1>
                       </div>
                     </div>
+                    
+                    {/* <div
+                      className="w-1/4 px-2 py-3 md:px-6 md:py-4 flex justify-center items-center"
+                    >
+                      <div className="w-[100px] border border-gray-300 rounded py-1 break-words text-center cursor-pointer">
+                        <h1 className="text-[10px] md:text-xs font-medium">Location</h1>
+                      </div>
+                    </div> */}
                     <div className="w-1/4 px-2 py-3 md:px-6 md:py-4 flex justify-center items-center">
                       <div className="w-[120px] text-center">{student.Time}</div>
                     </div>
