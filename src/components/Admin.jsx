@@ -1079,7 +1079,7 @@ try {
                                         <th className="px-6 py-3 border-b border-gray-300 w-1/4">Car Name</th>
                                         <th className="px-6 py-3 border-b border-gray-300 w-1/4">License</th>
                                         <th className="px-6 py-3 border-b border-gray-300 w-1/4">Status</th>
-                                        <th className="px-6 py-3 border-b border-gray-300 w-1/4">LogOut</th>
+                                        {/* <th className="px-6 py-3 border-b border-gray-300 w-1/4">LogOut</th> */}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1107,11 +1107,11 @@ try {
                                                     <span>{car.Status}</span>
                                                     </div>
                                                 </td>
-                                                <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
+                                                {/* <td className="px-5 py-3 border-b border-gray-300 font-semibold text-[12px] w-1/4 break-words">
                                                     <div className="w-full" >
                                                         <button onClick={() => logout(car.License)} className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 text-center ">Log Out</button>
                                                     </div>
-                                                </td>
+                                                </td> */}
                                              </tr>
                                         );
                                     })}
