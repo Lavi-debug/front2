@@ -707,6 +707,8 @@ const Logindriver = () => {
         // console.log(`The bus with license ${license} is offline.`);
         setIsLoggedIn(false);
 
+        await updateStatus("offline");
+
     // Clear localStorage
     localStorage.removeItem('Dlicense');
       } else {
