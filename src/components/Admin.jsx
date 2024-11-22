@@ -758,6 +758,8 @@ try {
     console.error("Error adding student history:", error.message);
 }
         };
+
+
     const updateModal = async (studentId, status) => {
         try {
             const now = new Date();

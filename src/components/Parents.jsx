@@ -412,6 +412,7 @@ const Parents = ({ license, contact, onLogout}) => {
   const [students, setStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [driverContact, setDriverContact] = useState('');
   const [matchedCar, setMatchedCar] = useState({
     coords: {
       lat: 28.2599333,
@@ -425,6 +426,8 @@ const Parents = ({ license, contact, onLogout}) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markerRef = useRef(null);
+  const [License, setLicense] = useState(license);
+  
 
   const filteredList = filteredStudents.filter((student) =>
     student.Child.toLowerCase().includes(searchTerm.toLowerCase())
@@ -477,7 +480,25 @@ const handleChildClick = async (id) => {
   }
 };
 
-  const fetchCarData = async () => {
+  // const fetchCarData = async () => {
+  //   try {
+  //     const response = await fetch(`${host}/api/auth/fetchallcars`);
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch car data");
+  //     }
+  //     const cars = await response.json();
+  //     const matchedCarData = cars.find((car) => car.License === License);
+  //     if (matchedCarData && matchedCarData.Coords) {
+  //       setMatchedCar({ coords: matchedCarData.Coords });
+  //     } else {
+  //       console.error("No car found with the specified license number");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching car data:", error);
+  //   }
+  // };
+
+  const fetchCarData = async (license) => {
     try {
       const response = await fetch(`${host}/api/auth/fetchallcars`);
       if (!response.ok) {
@@ -494,6 +515,7 @@ const handleChildClick = async (id) => {
       console.error("Error fetching car data:", error);
     }
   };
+  
 
   // const initializeMap = () => {
   //   if (!mapInstance.current) {
@@ -643,26 +665,201 @@ const handleChildClick = async (id) => {
     filterStudents();
   }, [students, contact]);
 
+  // useEffect(() => {
+  //   fetchAllStudents();
+  //   fetchCarData(License);
+  //   initializeMap();
+
+  //   const studentInterval = setInterval(fetchAllStudents, 2000);
+  //   const carInterval = setInterval(fetchCarData(License), 2000);
+
+  //   return () => {
+  //     clearInterval(studentInterval);
+  //     clearInterval(carInterval);
+  //   };
+  // }, []);
+
   useEffect(() => {
     fetchAllStudents();
-    fetchCarData();
+    fetchCarData(License); // Initial fetch with the correct license
     initializeMap();
-
-    const studentInterval = setInterval(fetchAllStudents, 2000);
-    const carInterval = setInterval(fetchCarData, 2000);
-
+  
+    const studentInterval = setInterval(() => {
+      fetchAllStudents();
+    }, 2000);
+  
+    const carInterval = setInterval(() => {
+      if (License) {
+        fetchCarData(License).catch((err) => console.error("Error fetching car data:", err));
+      } else {
+        console.error("License is not set, skipping fetchCarData");
+      }
+    }, 2000);
+  
     return () => {
       clearInterval(studentInterval);
       clearInterval(carInterval);
     };
-  }, []);
+  }, [License]); // Re-run when License changes
+  
 
+  
+  
   const openModal = (student) => {
     setSelectedStudent(student);
   };
 
   const closeModal = () => setSelectedStudent(null);
   const closehistoryModal = () => setModalOpen(false);
+
+
+  useEffect(() => {
+    const fetchCarDataByLicense = (licenseNumber) => {
+      const url = `${host}/api/auth/${licenseNumber}`; // Replace `host` with your actual API URL
+
+      fetch(url)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status} - ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.length > 0) {  // Check if the response contains at least one car
+            const driverCont = data[0].driverCont; // Access the driverCont from the first object in the array
+            setDriverContact(driverCont); // Save the driverCont in the state
+          } else {
+            console.log("No car data found for this license.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching car data:", error.message);
+        });
+    };
+
+    // Call the fetch function on page load
+    fetchCarDataByLicense(license);
+  }, [license]); // Dependency array to call the function when the license number changes
+
+
+//   const getCarDetails = async (license) => {
+//     try {
+//         // Fetch coordinates by license
+//         const response = await fetch(`${host}/api/auth/getcoordslicense/${license}`, {
+//             method: "GET",
+//             headers: {
+//                 "Content-Type": "application/json",
+//             },
+//         });
+
+//         if (!response.ok) {
+//             throw new Error(`HTTP error! status: ${response.status}`);
+//         }
+
+//         const { Coords } = await response.json(); // Destructure the Coords from the response
+//         console.log("Car Coordinates:", Coords); // Log the coordinates
+
+//         // Ensure Coords has the correct format
+//         if (Coords && typeof Coords.lat === 'number' && typeof Coords.lng === 'number') {
+//             // Update map coordinates with the clicked car's coordinates
+//              setMatchedCar(Coords);
+//              setSelectedStudentLicense(license); // Set the selected car's license
+//             console.log(Coords)
+//         } else {
+//             // Show a custom alert for unavailable coordinates
+//             showAlert("Coordinates are not available for this car. Please Login at driver page with this license to get coords");
+//             setSelectedStudentLicense(null); // Reset selected car license if no coordinates
+//         }
+//     } catch (error) {
+//         console.error("Error fetching car coordinates:", error.message);
+//         showAlert("An error occurred while fetching car coordinates.");
+//     }
+// };
+
+// useEffect(() => {
+//   let intervalId;
+
+//   const fetchCoordinates = async () => {
+//       if (selectedStudentLicense) {
+//           try {
+//               const response = await fetch(`${host}/api/auth/getcoordslicense/${selectedStudentLicense}`, {
+//                   method: "GET",
+//                   headers: {
+//                       "Content-Type": "application/json",
+//                   },
+//               });
+
+//               if (!response.ok) {
+//                   throw new Error(`HTTP error! status: ${response.status}`);
+//               }
+
+//               const { Coords } = await response.json(); // Destructure the Coords from the response
+//               if (Coords && typeof Coords.lat === 'number' && typeof Coords.lng === 'number') {
+//                   // Update map coordinates with the fetched coordinates
+//                   setMatchedCar(Coords);
+//               } else {
+//                   // If no coordinates are available, clear the interval and reset selected license
+//                   clearInterval(intervalId);
+//                   setSelectedStudentLicense(null);
+//               }
+//           } catch (error) {
+//               console.error("Error fetching car coordinates:", error.message);
+//           }
+//       }
+//   };
+
+//   if (selectedStudentLicense) {
+//       fetchCoordinates(); // Initial fetch for the selected car's coordinates
+//       intervalId = setInterval(fetchCoordinates, 2000); // Set interval for every 2 seconds
+//   }
+
+//   return () => {
+//       clearInterval(intervalId); // Cleanup interval on component unmount or license change
+//   };
+// }, [selectedStudentLicense]); // Depend on selectedCarLicense
+
+
+
+// const getCarDetails = async (license) => {
+//   try {
+//     // Make an API call to fetch coordinates using fetch
+//     const response = await fetch(`${host}/api/auth/getcoordslicense/${license}`, {
+//       method: 'GET',  // Explicitly defining the method as GET (optional since GET is default)
+//       headers: {
+//         'Content-Type': 'application/json',  // Specify the content type if necessary
+//       },
+//     });
+
+//     // Check if the response is OK (status code 200)
+//     if (!response.ok) {
+//       throw new Error('Car not found or there was an error with the request');
+//     }
+
+//     const data = await response.json();  // Parse JSON from the response
+
+//     if (data && data.Coords) {
+//       // setMatchedCar(data.Coords); // Update the state with the coordinates
+//       setMatchedCar({ coords: data.Coords });
+//       setLicense(license)
+//       console.log('Car Coordinates:', data.Coords); // Log for debugging
+//     } else {
+//       alert('No coordinates found for this car.');
+//     }
+//   } catch (error) {
+//     console.error('Error fetching car details:', error.message);
+//     alert('An error occurred while fetching car details.');
+//   }
+// };
+
+
+
+
+const updateLicense = (license) => {
+  setLicense(license);
+};
+
+  
+  
 
   return (
     <>
@@ -675,9 +872,14 @@ const handleChildClick = async (id) => {
           ></div>
 
           <div className="lgot h-[40px] p-2 md:p-4 flex items-center justify-end">
+          <div className='w-1/2 flex items-center justify-start'>
+              <h1 className='mr-[6px] font-semibold'>Driver Contact:</h1>
+              <h1 className=' font-semibold'>{driverContact}</h1>
+            </div>
             <div className='w-1/2 flex items-center justify-end'>
               <button onClick={onLogout} className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 text-center ">Log Out</button>
             </div>
+            
           </div>
 
           <div className="list flex-grow h-[40%]">
@@ -746,6 +948,10 @@ const handleChildClick = async (id) => {
                     <div className="w-[100px] break-words text-center">School</div>
                   </div>
                   <div className="w-1/4 px-2 py-3 md:px-6 md:py-4 flex justify-center items-center text-gray-900 font-medium">
+                    <div className="w-[100px] break-words text-center">Track</div>
+                  </div>
+                  
+                  <div className="w-1/4 px-2 py-3 md:px-6 md:py-4 flex justify-center items-center text-gray-900 font-medium">
                     <div className="w-[100px] break-words text-center">Status</div>
                   </div>
                   <div className="w-1/4 px-2 py-3 md:px-6 md:py-4 flex justify-center items-center text-gray-900 font-medium">
@@ -764,6 +970,12 @@ const handleChildClick = async (id) => {
                     <div className="w-1/4 px-2 py-3 md:px-6 md:py-4 flex justify-center items-center">
                       <div className="w-[100px] break-words text-center">{student.School}</div>
                     </div>
+                    <div className="track w-1/4 px-2 py-3 md:px-6 md:py-4 flex justify-center items-center" >
+                      <div className="w-[100px] border border-gray-300 rounded py-1 break-words text-center cursor-pointer" onClick={() => updateLicense(student.License)}>
+                        <h1 className="text-[10px] md:text-xs font-medium">Track</h1>
+                      </div>
+                    </div>
+                    
                     <div className="w-1/4 px-2 py-3 md:px-6 md:py-4 flex justify-center items-center" onClick={() => openModal(student)}>
                       <div className="w-[100px] border border-gray-300 rounded py-1 break-words text-center cursor-pointer">
                         <h1 className="text-[10px] md:text-xs font-medium">{student.Status}</h1>

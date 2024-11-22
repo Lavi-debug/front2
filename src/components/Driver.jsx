@@ -296,6 +296,8 @@ useEffect(() => {
   fetchStudents();
   }, [license]);
 
+  
+
   const handleStatusChange = (studentId, event) => {
   const newStatus = event.target.value;
   updateStudentStatus(studentId, newStatus);
@@ -358,6 +360,7 @@ useEffect(() => {
   
 
   const handleQRClick = () => setIsScannerOpen(true);
+
 
   const handleScanSuccess = (decodedText) => {
     try {
