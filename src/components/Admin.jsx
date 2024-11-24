@@ -554,21 +554,99 @@ const Admin = ({ onLogout}) => {
 // Functions to fetch all students and cars
 
     //Student:
+    // const getStudents = async () => {
+    //     try {
+    //         const response = await fetch(`${host}/api/student/fetchallstudents`, {
+    //             method: "GET",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //             }
+    //         });
+    //         const json = await response.json();
+    //         setStudents(json);
+    //         console.log(json)
+    //     } catch (error) {
+    //         console.error("Error fetching students:", error);
+    //     }
+    // };
+
+
+
+
+    // const getStudents = async () => {
+    //     try {
+    //         const response = await fetch(`${host}/api/student/fetchallstudents`, {
+    //             method: "GET",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //             },
+    //         });
+    
+    //         if (!response.ok) {
+    //             throw new Error(`HTTP error! status: ${response.status}`);
+    //         }
+    
+    //         const json = await response.json();
+    
+    //         // Ensure `json` is an array and not null/undefined
+    //         if (Array.isArray(json)) {
+    //             setStudents(json); // Update the state only with valid data
+    //         } else {
+    //             console.warn("Unexpected data format:", json);
+    //             setStudents([]); // Default to an empty array if data is invalid
+    //         }
+    
+    //         console.log(json);
+    //     } catch (error) {
+    //         console.error("Error fetching students:", error);
+    
+    //         // Handle errors by setting an empty array or showing a fallback UI
+    //         setStudents([]); 
+    //     }
+    // };
+
+
     const getStudents = async () => {
         try {
             const response = await fetch(`${host}/api/student/fetchallstudents`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                }
+                },
             });
+    
+            // Handle non-2xx HTTP status codes
+            if (!response.ok) {
+                if (response.status === 404) {
+                    console.warn("No students found (404).");
+                    setStudents([]); // Set an empty array for no data
+                    return;
+                }
+    
+                // Throw error for other HTTP errors
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+    
             const json = await response.json();
-            setStudents(json);
-            console.log(json)
+    
+            // Ensure the response data is an array
+            if (Array.isArray(json)) {
+                setStudents(json);
+            } else {
+                console.warn("Unexpected data format:", json);
+                setStudents([]); // Default to empty array if the data is invalid
+            }
+    
+            console.log(json);
         } catch (error) {
             console.error("Error fetching students:", error);
+    
+            // Handle errors gracefully by setting an empty state
+            setStudents([]); 
         }
     };
+    
+    
 
     //Car:
     const getCars = async () => {
@@ -605,37 +683,61 @@ const Admin = ({ onLogout}) => {
 // Functions to delete student and car
 
     //Student
+    // const deleteStudent = async (studentId) => {
+    //     try {
+    //         // Make an API call to delete the student from the database
+    //         const response = await fetch(`${host}/api/student/deletestudent/${studentId}`, {
+    //             method: 'DELETE',
+    //         });
+
+    //         if (!response.ok) {
+    //             throw new Error('Failed to delete student');
+    //         }
+
+    //         console.log('Student deleted successfully');
+
+    //         // After successful deletion, fetch the updated list of students
+    //         const fetchResponse = await fetch(`${host}/api/student/fetchallstudents`, {
+    //             method: 'GET',
+    //         });
+
+    //         if (!fetchResponse.ok) {
+    //             throw new Error('Failed to fetch updated student list');
+    //         }
+
+    //         const updatedStudents = await fetchResponse.json();
+
+    //         // Update the state with the new list of students
+    //         setStudents(updatedStudents);
+
+    //     } catch (error) {
+    //         console.error('Error deleting student or fetching updated list:', error);
+    //     }
+    // };
+
     const deleteStudent = async (studentId) => {
         try {
             // Make an API call to delete the student from the database
             const response = await fetch(`${host}/api/student/deletestudent/${studentId}`, {
                 method: 'DELETE',
             });
-
+    
             if (!response.ok) {
                 throw new Error('Failed to delete student');
             }
-
+    
             console.log('Student deleted successfully');
-
-            // After successful deletion, fetch the updated list of students
-            const fetchResponse = await fetch(`${host}/api/student/fetchallstudents`, {
-                method: 'GET',
-            });
-
-            if (!fetchResponse.ok) {
-                throw new Error('Failed to fetch updated student list');
-            }
-
-            const updatedStudents = await fetchResponse.json();
-
-            // Update the state with the new list of students
-            setStudents(updatedStudents);
-
+    
+            // Update the state directly by filtering out the deleted student
+            setStudents((prevStudents) =>
+                prevStudents.filter((student) => student.id !== studentId)
+            );
+    
         } catch (error) {
-            console.error('Error deleting student or fetching updated list:', error);
+            console.error('Error deleting student:', error);
         }
     };
+    
 
     //Car
     const deleteCar = async (carId) => {
