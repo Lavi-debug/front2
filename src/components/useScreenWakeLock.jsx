@@ -11,6 +11,9 @@ const useScreenWakeLock = () => {
     
           // Dispatch the touch event to the document body
           document.body.dispatchEvent(touchEvent);
+    
+          // Show an alert every time the touch simulation triggers
+          alert('Touch event simulated!');
         };
     
         // Set interval to simulate a touch event every 5 seconds
@@ -21,7 +24,6 @@ const useScreenWakeLock = () => {
           clearInterval(intervalId);
         };
       }, []);
-
 };
 
 export default useScreenWakeLock;
