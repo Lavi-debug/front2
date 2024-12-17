@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
+import useScreenWakeLock from './useScreenWakeLock';
 
 const Driver = ({ license, onLogout }) => {
+  useScreenWakeLock();
   const host = "https://logi-52ys.onrender.com";
   const [students, setStudents] = useState([]);
   const mapRef = useRef(null);
