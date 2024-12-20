@@ -443,9 +443,9 @@ useEffect(() => {
         loop
         muted
         playsInline
-        className='w-[1px]' // Adjust size as needed
+        className='max-w-[400px] w-full absolute z-50 ' // Adjust size as needed
       ></video>
-      <div className="main h-screen w-screen flex justify-center items-center bg-[#b5c2ca]">
+      <div className="z-50 relative main h-screen w-screen flex justify-center items-center bg-[#b5c2ca]">
         <div className="mainn w-full h-full md:w-[90%] md:h-[90%] lg:w-[88%] lg:h-[88%] bg-gray-100 flex flex-col p-1 pb-2 rounded-lg border-[1px] border-black">
           <div
             className="map w-full h-[50vh] md:h-[60%] lg:h-[70%] bg-blue-300 mb-1 rounded-tr-lg rounded-tl-lg"
