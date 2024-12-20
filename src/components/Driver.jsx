@@ -434,35 +434,16 @@ useEffect(() => {
       .catch((error) => console.error("Failed to play the video:", error));
   }, []);
 
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const handlePlay = () => {
-    const videoElement = document.getElementById('keep-awake-video');
-    if (videoElement) {
-      videoElement.play();
-      setIsPlaying(true);
-    }
-  };
-
   return (
     <div className='relative'>
       {/* <Keepscreenon/> */}
-      {!isPlaying && (
-        <button
-          onClick={handlePlay}
-          className="px-4 py-2 bg-blue-500 text-white rounded"
-        >
-          Start Video to Keep Screen Awake
-        </button>
-      )}
       <video
         id="keep-awake-video"
         src={video} // Replace with your video file path
         loop
         muted
         playsInline
-        className='max-w-[400px] w-full  ' // Adjust size as needed
-        onPlay={() => document.getElementById('keep-awake-video').requestFullscreen?.()}
+        className='max-w-[400px] w-full absolute z-50 ' // Adjust size as needed
       ></video>
       <div className="z-50 relative main h-screen w-screen flex justify-center items-center bg-[#b5c2ca]">
         <div className="mainn w-full h-full md:w-[90%] md:h-[90%] lg:w-[88%] lg:h-[88%] bg-gray-100 flex flex-col p-1 pb-2 rounded-lg border-[1px] border-black">
