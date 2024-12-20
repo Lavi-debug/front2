@@ -14,10 +14,10 @@ import Parentscopy from './components/Parentscopy';
 import Loginparents from './components/Loginparents';
 import Students from './components/Students';
 import Loginstudent from './components/Loginstudent';
-import useScreenWakeLock from './components/useScreenWakeLock';
+
 
 function App() {
-  // useScreenWakeLock();
+
   return (
     <Router>
       <Routes>

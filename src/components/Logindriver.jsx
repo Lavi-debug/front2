@@ -573,7 +573,8 @@
 
 import React, { useState, useEffect } from 'react';
 import Driver from './Driver';
-import { ScreenOrientation } from "@capacitor/screen-orientation";
+import Keepscreenon from './Keepscreenon';
+
 
 const Logindriver = () => {
   
@@ -584,9 +585,6 @@ const Logindriver = () => {
   const host = "https://logi-52ys.onrender.com";
 
   useEffect(() => {
-
-     // Keep the screen on when the page is loaded
-     ScreenOrientation.unlockOrientation(); // Unlock orientation, prevent screen from turning off
 
     // Check localStorage to persist login state
     const storedLicense = localStorage.getItem('Dlicense');
@@ -768,64 +766,67 @@ const Logindriver = () => {
 
 
   return (
-    <div className="login-container flex items-center justify-center min-h-screen bg-[#b5c2ca] p-4">
-      {!isLoggedIn ? (
-        <div className="login-container w-[90%] md:w-[60%] lg:w-[40%] h-auto md:h-[60%] lg:h-[36%] p-5 md:p-8 border-2 border-black rounded-2xl bg-gray-200">
-          <div className="hdng text-lg md:text-xl lg:text-2xl font-semibold mb-6 text-center">
-            <h1>Welcome Driver</h1>
+    <>
+      <Keepscreenon/>
+      <div className="login-container flex items-center justify-center min-h-screen bg-[#b5c2ca] p-4">
+        {!isLoggedIn ? (
+          <div className="login-container w-[90%] md:w-[60%] lg:w-[40%] h-auto md:h-[60%] lg:h-[36%] p-5 md:p-8 border-2 border-black rounded-2xl bg-gray-200">
+            <div className="hdng text-lg md:text-xl lg:text-2xl font-semibold mb-6 text-center">
+              <h1>Welcome Driver</h1>
+            </div>
+            <form onSubmit={handleLogin} className="max-w-md mx-auto">
+              <div className="relative z-0 w-full mb-6 group">
+                <input
+                  value={license}
+                  onChange={(e) => setLicense(e.target.value)}
+                  type="text"
+                  name="license"
+                  id="license"
+                  className="block py-3 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                  required
+                />
+                <label
+                  htmlFor="license"
+                  className="absolute text-sm text-black duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:scale-75 peer-focus:-translate-y-6 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100"
+                >
+                  License
+                </label>
+              </div>
+              <div className="relative z-0 w-full mb-6 group">
+                <input
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  type="text"
+                  name="password"
+                  id="password"
+                  className="block py-3 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                  required
+                />
+                <label
+                  htmlFor="password"
+                  className="absolute text-sm text-black duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:scale-75 peer-focus:-translate-y-6 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100"
+                >
+                  Password
+                </label>
+              </div>
+              <button
+                type="submit"
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center md:w-auto"
+              >
+                Submit
+              </button>
+            </form>
+            {errorMessage && <p className="text-red-600 text-center mt-4">{errorMessage}</p>}
           </div>
-          <form onSubmit={handleLogin} className="max-w-md mx-auto">
-            <div className="relative z-0 w-full mb-6 group">
-              <input
-                value={license}
-                onChange={(e) => setLicense(e.target.value)}
-                type="text"
-                name="license"
-                id="license"
-                className="block py-3 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                required
-              />
-              <label
-                htmlFor="license"
-                className="absolute text-sm text-black duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:scale-75 peer-focus:-translate-y-6 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100"
-              >
-                License
-              </label>
-            </div>
-            <div className="relative z-0 w-full mb-6 group">
-              <input
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type="text"
-                name="password"
-                id="password"
-                className="block py-3 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                required
-              />
-              <label
-                htmlFor="password"
-                className="absolute text-sm text-black duration-300 transform -translate-y-6 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:scale-75 peer-focus:-translate-y-6 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100"
-              >
-                Password
-              </label>
-            </div>
-            <button
-              type="submit"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center md:w-auto"
-            >
-              Submit
-            </button>
-          </form>
-          {errorMessage && <p className="text-red-600 text-center mt-4">{errorMessage}</p>}
-        </div>
-      ) : (
-        <div>
-          <Driver license={license} onLogout={handleLogout} />
-        </div>
-      )}
-    </div>
+        ) : (
+          <div>
+            <Driver license={license} onLogout={handleLogout} />
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

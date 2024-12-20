@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
-import useScreenWakeLock from './useScreenWakeLock';
+import Keepscreenon from './Keepscreenon';
 
 const Driver = ({ license, onLogout }) => {
   const host = "https://logi-52ys.onrender.com";
@@ -429,199 +429,200 @@ useEffect(() => {
 
   return (
     <>
-  <div className="main h-screen w-screen flex justify-center items-center bg-[#b5c2ca]">
-    <div className="mainn w-full h-full md:w-[90%] md:h-[90%] lg:w-[88%] lg:h-[88%] bg-gray-100 flex flex-col p-1 pb-2 rounded-lg border-[1px] border-black">
-      <div
-        className="map w-full h-[50vh] md:h-[60%] lg:h-[70%] bg-blue-300 mb-1 rounded-tr-lg rounded-tl-lg"
-        ref={mapRef}
-      ></div>
+      <Keepscreenon/>
+      <div className="main h-screen w-screen flex justify-center items-center bg-[#b5c2ca]">
+        <div className="mainn w-full h-full md:w-[90%] md:h-[90%] lg:w-[88%] lg:h-[88%] bg-gray-100 flex flex-col p-1 pb-2 rounded-lg border-[1px] border-black">
+          <div
+            className="map w-full h-[50vh] md:h-[60%] lg:h-[70%] bg-blue-300 mb-1 rounded-tr-lg rounded-tl-lg"
+            ref={mapRef}
+          ></div>
 
-      <div className="qrcont h-[40px] p-2 md:p-4 flex items-center">
-        <div className="flex gap-2 items-center w-1/2">
-          <div className="qrcd w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10  cursor-pointer rounded" onClick={handleQRClick}>
-          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5985E1"><path d="M80-680v-200h200v80H160v120H80Zm0 600v-200h80v120h120v80H80Zm600 0v-80h120v-120h80v200H680Zm120-600v-120H680v-80h200v200h-80ZM700-260h60v60h-60v-60Zm0-120h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60-60h60v60h-60v-60Zm120-120h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60-60h60v60h-60v-60Zm240-320v240H520v-240h240ZM440-440v240H200v-240h240Zm0-320v240H200v-240h240Zm-60 500v-120H260v120h120Zm0-320v-120H260v120h120Zm320 0v-120H580v120h120Z"/></svg>
-          </div>
-        </div>
-        <div className='w-1/2 flex items-center justify-end'>
-          <button onClick={onLogout} className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 text-center ">Log Out</button>
-        </div>
-      </div>
-
-      <div className="list flex-grow h-[30vh] md:h-[35%] lg:h-[40%] w-full">
-        <div className="relative shadow-md rounded-bl-lg rounded-br-lg h-full overflow-y-auto scrollbar-hidden">
-          {students.length === 0 ? (
-            <div className="text-center p-4 text-red-600 font-semibold">
-              No students assigned to this bus.
+          <div className="qrcont h-[40px] p-2 md:p-4 flex items-center">
+            <div className="flex gap-2 items-center w-1/2">
+              <div className="qrcd w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10  cursor-pointer rounded" onClick={handleQRClick}>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5985E1"><path d="M80-680v-200h200v80H160v120H80Zm0 600v-200h80v120h120v80H80Zm600 0v-80h120v-120h80v200H680Zm120-600v-120H680v-80h200v200h-80ZM700-260h60v60h-60v-60Zm0-120h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60-60h60v60h-60v-60Zm120-120h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60-60h60v60h-60v-60Zm240-320v240H520v-240h240ZM440-440v240H200v-240h240Zm0-320v240H200v-240h240Zm-60 500v-120H260v120h120Zm0-320v-120H260v120h120Zm320 0v-120H580v120h120Z"/></svg>
+              </div>
             </div>
-          ) : (
-            // <table className="w-full text-xs md:text-sm lg:text-base text-left rtl:text-right text-gray-500">
-            //   <thead className="text-xs md:text-sm lg:text-base text-gray-700 uppercase bg-gray-50">
-            //     <tr>
-            //       <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
-            //         Student
-            //       </th>
-            //       <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
-            //         School
-            //       </th>
-            //       <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
-            //         Residence
-            //       </th>
-            //       <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
-            //         Pt. Contact
-            //       </th>
-            //       <th scope="col" className="px-3 md:pl-6 pr-[20px] md:pr-[40px] py-2 md:py-3 lg:py-4 sticky top-0 bg-gray-50">
-            //         Status
-            //       </th>
-            //     </tr>
-            //   </thead>
-            //   <tbody>
-            //     {students.map((student) => (
-            //       <tr key={student.id} className="bg-white border-b hover:bg-gray-50">
-            //         <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base" onClick={() => handleChildClick(student.id)}>
-            //           {student.Child}
-            //         </td>
-            //         <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base">
-            //           {student.School}
-            //         </td>
-            //         <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base">
-            //           {student.Address}
-            //         </td>
-            //         <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base">
-            //           {student.Contact}
-            //         </td>
-            //         <td className="px-3 md:pl-6 pr-[20px] md:pr-[40px] py-2 md:py-4">
-            //           <select
-            //             className="border rounded-md w-[80px] md:w-[100px] lg:w-[120px] h-8 md:h-9 lg:h-10 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs md:text-sm lg:text-base"
-            //             onChange={(e) => handleStatusChange(student.id, e)}
-            //             value={student.Status}
-            //           >
-            //             <option value="ToSchool">To School</option>
-            //             <option value="AtSchool">At School</option>
-            //             <option value="ToHome">To Home</option>
-            //             <option value="AtHome">At Home</option>
-            //           </select>
-            //         </td>
-            //       </tr>
-            //     ))}
-            //   </tbody>
-            // </table>
-
-            <div>
-            {/* Search Bar */}
-            <input
-              type="text"
-              placeholder="Search by student name"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              className=" p-2 border rounded-md w-full md:w-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            
-            {/* Table */}
-            <table className="w-full text-xs md:text-sm lg:text-base text-left rtl:text-right text-gray-500">
-              <thead className="text-xs md:text-sm lg:text-base text-gray-700 uppercase bg-gray-50">
-                <tr>
-                  <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
-                    Student
-                  </th>
-                  <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
-                    School
-                  </th>
-                  <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
-                    Residence
-                  </th>
-                  <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
-                    Pt. Contact
-                  </th>
-                  <th scope="col" className="px-3 md:pl-6 pr-[20px] md:pr-[40px] py-2 md:py-3 lg:py-4 sticky top-0 bg-gray-50">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredStudents.map((student) => (
-                  <tr key={student.id} className="bg-white border-b hover:bg-gray-50">
-                    <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base" onClick={() => handleChildClick(student.id)}>
-                      {student.Child}
-                    </td>
-                    <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base">
-                      {student.School}
-                    </td>
-                    <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base">
-                      {student.Address}
-                    </td>
-                    <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base">
-                      {student.Contact}
-                    </td>
-                    <td className="px-3 md:pl-6 pr-[20px] md:pr-[40px] py-2 md:py-4">
-                      <select
-                        className="border rounded-md w-[80px] md:w-[100px] lg:w-[120px] h-8 md:h-9 lg:h-10 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs md:text-sm lg:text-base"
-                        onChange={(e) => handleStatusChange(student.id, e)}
-                        value={student.Status}
-                      >
-                        <option value="ToSchool">To School</option>
-                        <option value="AtSchool">At School</option>
-                        <option value="ToHome">To Home</option>
-                        <option value="AtHome">At Home</option>
-                      </select>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div className='w-1/2 flex items-center justify-end'>
+              <button onClick={onLogout} className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 text-center ">Log Out</button>
+            </div>
           </div>
+
+          <div className="list flex-grow h-[30vh] md:h-[35%] lg:h-[40%] w-full">
+            <div className="relative shadow-md rounded-bl-lg rounded-br-lg h-full overflow-y-auto scrollbar-hidden">
+              {students.length === 0 ? (
+                <div className="text-center p-4 text-red-600 font-semibold">
+                  No students assigned to this bus.
+                </div>
+              ) : (
+                // <table className="w-full text-xs md:text-sm lg:text-base text-left rtl:text-right text-gray-500">
+                //   <thead className="text-xs md:text-sm lg:text-base text-gray-700 uppercase bg-gray-50">
+                //     <tr>
+                //       <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
+                //         Student
+                //       </th>
+                //       <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
+                //         School
+                //       </th>
+                //       <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
+                //         Residence
+                //       </th>
+                //       <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
+                //         Pt. Contact
+                //       </th>
+                //       <th scope="col" className="px-3 md:pl-6 pr-[20px] md:pr-[40px] py-2 md:py-3 lg:py-4 sticky top-0 bg-gray-50">
+                //         Status
+                //       </th>
+                //     </tr>
+                //   </thead>
+                //   <tbody>
+                //     {students.map((student) => (
+                //       <tr key={student.id} className="bg-white border-b hover:bg-gray-50">
+                //         <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base" onClick={() => handleChildClick(student.id)}>
+                //           {student.Child}
+                //         </td>
+                //         <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base">
+                //           {student.School}
+                //         </td>
+                //         <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base">
+                //           {student.Address}
+                //         </td>
+                //         <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base">
+                //           {student.Contact}
+                //         </td>
+                //         <td className="px-3 md:pl-6 pr-[20px] md:pr-[40px] py-2 md:py-4">
+                //           <select
+                //             className="border rounded-md w-[80px] md:w-[100px] lg:w-[120px] h-8 md:h-9 lg:h-10 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs md:text-sm lg:text-base"
+                //             onChange={(e) => handleStatusChange(student.id, e)}
+                //             value={student.Status}
+                //           >
+                //             <option value="ToSchool">To School</option>
+                //             <option value="AtSchool">At School</option>
+                //             <option value="ToHome">To Home</option>
+                //             <option value="AtHome">At Home</option>
+                //           </select>
+                //         </td>
+                //       </tr>
+                //     ))}
+                //   </tbody>
+                // </table>
+
+                <div>
+                {/* Search Bar */}
+                <input
+                  type="text"
+                  placeholder="Search by student name"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  className=" p-2 border rounded-md w-full md:w-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                
+                {/* Table */}
+                <table className="w-full text-xs md:text-sm lg:text-base text-left rtl:text-right text-gray-500">
+                  <thead className="text-xs md:text-sm lg:text-base text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                      <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
+                        Student
+                      </th>
+                      <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
+                        School
+                      </th>
+                      <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
+                        Residence
+                      </th>
+                      <th scope="col" className="px-3 md:px-6 py-2 md:py-3 lg:px-8 lg:py-4 sticky top-0 bg-gray-50">
+                        Pt. Contact
+                      </th>
+                      <th scope="col" className="px-3 md:pl-6 pr-[20px] md:pr-[40px] py-2 md:py-3 lg:py-4 sticky top-0 bg-gray-50">
+                        Status
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredStudents.map((student) => (
+                      <tr key={student.id} className="bg-white border-b hover:bg-gray-50">
+                        <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base" onClick={() => handleChildClick(student.id)}>
+                          {student.Child}
+                        </td>
+                        <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base">
+                          {student.School}
+                        </td>
+                        <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base">
+                          {student.Address}
+                        </td>
+                        <td className="px-3 md:px-6 py-2 md:py-4 w-1/4 break-words text-xs md:text-sm lg:text-base">
+                          {student.Contact}
+                        </td>
+                        <td className="px-3 md:pl-6 pr-[20px] md:pr-[40px] py-2 md:py-4">
+                          <select
+                            className="border rounded-md w-[80px] md:w-[100px] lg:w-[120px] h-8 md:h-9 lg:h-10 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs md:text-sm lg:text-base"
+                            onChange={(e) => handleStatusChange(student.id, e)}
+                            value={student.Status}
+                          >
+                            <option value="ToSchool">To School</option>
+                            <option value="AtSchool">At School</option>
+                            <option value="ToHome">To Home</option>
+                            <option value="AtHome">At Home</option>
+                          </select>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {isScannerOpen && (
+        <div className="absolute top-10 w-full md:w-[80%] lg:w-[600px] md:h-[300px] lg:h-[540px] flex justify-center">
+          <div className="modal bg-white p-4 rounded-md shadow-lg w-full">
+            <div id="reader" className="w-full"></div>
+            <button
+              onClick={() => setIsScannerOpen(false)}
+              className="mt-4 p-2 w-full md:w-auto bg-red-500 text-white rounded"
+            >
+              Close Scanner
+            </button>
+          </div>
+        </div>
+      )}
+
+
+      {modalOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+              <div className="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full">
+                <h2 className="text-lg font-bold mb-4">Status History</h2>
+                <div className="overflow-auto max-h-96">
+                  <table className="w-full border-collapse border border-gray-200">
+                    <thead>
+                      <tr className="bg-gray-100">
+                        <th className="border border-gray-300 px-4 py-2 text-left">Status</th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {modalData.map((record, index) => (
+                        <tr key={index} className="hover:bg-gray-50">
+                          <td className="border border-gray-300 px-4 py-2">{record.Status}</td>
+                          <td className="border border-gray-300 px-4 py-2">{record.Time}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <button
+                  onClick={closehistoryModal}
+                  className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
           )}
-        </div>
-      </div>
-    </div>
-  </div>
-
-  {isScannerOpen && (
-    <div className="absolute top-10 w-full md:w-[80%] lg:w-[600px] md:h-[300px] lg:h-[540px] flex justify-center">
-      <div className="modal bg-white p-4 rounded-md shadow-lg w-full">
-        <div id="reader" className="w-full"></div>
-        <button
-          onClick={() => setIsScannerOpen(false)}
-          className="mt-4 p-2 w-full md:w-auto bg-red-500 text-white rounded"
-        >
-          Close Scanner
-        </button>
-      </div>
-    </div>
-  )}
-
-
-{modalOpen && (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-        <div className="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full">
-          <h2 className="text-lg font-bold mb-4">Status History</h2>
-          <div className="overflow-auto max-h-96">
-            <table className="w-full border-collapse border border-gray-200">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="border border-gray-300 px-4 py-2 text-left">Status</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                {modalData.map((record, index) => (
-                  <tr key={index} className="hover:bg-gray-50">
-                    <td className="border border-gray-300 px-4 py-2">{record.Status}</td>
-                    <td className="border border-gray-300 px-4 py-2">{record.Time}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <button
-            onClick={closehistoryModal}
-            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    )}
-</>
+    </> 
 
   );
 };
