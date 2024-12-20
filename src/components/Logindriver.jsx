@@ -573,8 +573,10 @@
 
 import React, { useState, useEffect } from 'react';
 import Driver from './Driver';
+import { ScreenOrientation } from "@capacitor/screen-orientation";
 
 const Logindriver = () => {
+  
   const [license, setLicense] = useState('');
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -582,6 +584,10 @@ const Logindriver = () => {
   const host = "https://logi-52ys.onrender.com";
 
   useEffect(() => {
+
+     // Keep the screen on when the page is loaded
+     ScreenOrientation.unlockOrientation(); // Unlock orientation, prevent screen from turning off
+
     // Check localStorage to persist login state
     const storedLicense = localStorage.getItem('Dlicense');
     if (storedLicense) {
