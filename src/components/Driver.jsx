@@ -434,6 +434,14 @@ useEffect(() => {
       .catch((error) => console.error("Failed to play the video:", error));
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      window.scrollTo(0, 1); // Simulates activity
+    }, 30000); // Adjust interval as needed
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className='relative'>
       {/* <Keepscreenon/> */}
@@ -444,6 +452,7 @@ useEffect(() => {
         muted
         playsInline
         className='max-w-[400px] w-full  ' // Adjust size as needed
+        onPlay={() => document.getElementById('keep-awake-video').requestFullscreen?.()}
       ></video>
       <div className="z-50 relative main h-screen w-screen flex justify-center items-center bg-[#b5c2ca]">
         <div className="mainn w-full h-full md:w-[90%] md:h-[90%] lg:w-[88%] lg:h-[88%] bg-gray-100 flex flex-col p-1 pb-2 rounded-lg border-[1px] border-black">
