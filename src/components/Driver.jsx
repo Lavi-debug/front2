@@ -434,17 +434,27 @@ useEffect(() => {
       .catch((error) => console.error("Failed to play the video:", error));
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      window.scrollTo(0, 1); // Simulates activity
-    }, 30000); // Adjust interval as needed
+  const [isPlaying, setIsPlaying] = useState(false);
 
-    return () => clearInterval(interval);
-  }, []);
+  const handlePlay = () => {
+    const videoElement = document.getElementById('keep-awake-video');
+    if (videoElement) {
+      videoElement.play();
+      setIsPlaying(true);
+    }
+  };
 
   return (
     <div className='relative'>
       {/* <Keepscreenon/> */}
+      {!isPlaying && (
+        <button
+          onClick={handlePlay}
+          className="px-4 py-2 bg-blue-500 text-white rounded"
+        >
+          Start Video to Keep Screen Awake
+        </button>
+      )}
       <video
         id="keep-awake-video"
         src={video} // Replace with your video file path
