@@ -17,7 +17,7 @@ import Loginstudent from './components/Loginstudent';
 import useScreenWakeLock from './components/useScreenWakeLock';
 
 function App() {
-  useScreenWakeLock();
+  // useScreenWakeLock();
   return (
     <Router>
       <Routes>
