@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 import Keepscreenon from './Keepscreenon';
+import video from './video.mp4'
 
 const Driver = ({ license, onLogout }) => {
   const host = "https://logi-52ys.onrender.com";
@@ -426,10 +427,24 @@ useEffect(() => {
   };
 
   const closehistoryModal = () => setModalOpen(false);
+  useEffect(() => {
+    const videoElement = document.getElementById("keep-awake-video");
+    videoElement
+      .play()
+      .catch((error) => console.error("Failed to play the video:", error));
+  }, []);
 
   return (
     <>
-      <Keepscreenon/>
+      {/* <Keepscreenon/> */}
+      <video
+        id="keep-awake-video"
+        src={video} // Replace with your video file path
+        loop
+        muted
+        playsInline
+        style={{ width: "100%", maxWidth: "400px" }} // Adjust size as needed
+      ></video>
       <div className="main h-screen w-screen flex justify-center items-center bg-[#b5c2ca]">
         <div className="mainn w-full h-full md:w-[90%] md:h-[90%] lg:w-[88%] lg:h-[88%] bg-gray-100 flex flex-col p-1 pb-2 rounded-lg border-[1px] border-black">
           <div
