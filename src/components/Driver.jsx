@@ -437,15 +437,17 @@ useEffect(() => {
   return (
     <div className='relative'>
       {/* <Keepscreenon/> */}
+
       <video
         id="keep-awake-video"
         src={video} // Replace with your video file path
         loop
         muted
         playsInline
-        className='max-w-[400px] w-full absolute z-50 ' // Adjust size as needed
+        className='max-w-[400px] w-full absolute z-10 ' // Adjust size as needed
       ></video>
-      <div className="z-50 relative main h-screen w-screen flex justify-center items-center bg-[#b5c2ca]">
+      
+      <div className="z-10 relative main h-screen w-screen flex justify-center items-center bg-[#b5c2ca]">
         <div className="mainn w-full h-full md:w-[90%] md:h-[90%] lg:w-[88%] lg:h-[88%] bg-gray-100 flex flex-col p-1 pb-2 rounded-lg border-[1px] border-black">
           <div
             className="map w-full h-[50vh] md:h-[60%] lg:h-[70%] bg-blue-300 mb-1 rounded-tr-lg rounded-tl-lg"
@@ -592,7 +594,7 @@ useEffect(() => {
       </div>
 
       {isScannerOpen && (
-        <div className="absolute top-10 w-full md:w-[80%] lg:w-[600px] md:h-[300px] lg:h-[540px] flex justify-center">
+        <div className="z-[50] absolute top-10 w-full md:w-[80%] lg:w-[600px] md:h-[300px] lg:h-[540px] flex justify-center">
           <div className="modal bg-white p-4 rounded-md shadow-lg w-full">
             <div id="reader" className="w-full"></div>
             <button
