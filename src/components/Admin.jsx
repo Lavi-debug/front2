@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react"
 
 const Admin = ({ onLogout}) => {
-    const host = "https://logi-52ys.onrender.com"; //http://localhost:5000 https://logi-52ys.onrender.com
+    const host = "https://logi-1.onrender.com"; //http://localhost:5000 https://logi-52ys.onrender.com
     const mapRef = useRef(null);
     const markerRef = useRef(null); // Create a ref for the marker+-
     const mapInstance = useRef(null);

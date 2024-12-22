@@ -462,7 +462,7 @@ const Students = ({ license, contact, onLogout}) => {
   const [qrCodeValue, setQrCodeValue] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
   
-  const host = "https://logi-52ys.onrender.com";
+  const host = "https://logi-1.onrender.com";
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markerRef = useRef(null);
