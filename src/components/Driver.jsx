@@ -4,7 +4,7 @@ import Keepscreenon from './Keepscreenon';
 import video from './video.mp4'
 
 const Driver = ({ license, onLogout }) => {
-  const host = "https://logi-1.onrender.com";
+  const host = "https://logi-52ys.onrender.com";
   const [students, setStudents] = useState([]);
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);

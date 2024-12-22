@@ -377,7 +377,7 @@ const Loginparents = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [showParents, setShowParents] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const host = "https://logi-1.onrender.com";
+  const host = "https://logi-52ys.onrender.com";
 
   // Restore login state on component mount
   useEffect(() => {

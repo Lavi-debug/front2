@@ -115,7 +115,7 @@ const Loginstudent = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [showParents, setShowParents] = useState(false);
 
-  const host = "https://logi-1.onrender.com";
+  const host = "https://logi-52ys.onrender.com";
 
   // Check localStorage for persisted login state
   useEffect(() => {

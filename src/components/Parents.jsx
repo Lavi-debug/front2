@@ -422,7 +422,7 @@ const Parents = ({ license, contact, onLogout}) => {
   const [modalOpen, setModalOpen] = React.useState(false);
   const [modalData, setModalData] = React.useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
-  const host = "https://logi-1.onrender.com";
+  const host = "https://logi-52ys.onrender.com";
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markerRef = useRef(null);
